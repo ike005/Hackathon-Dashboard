@@ -1,0 +1,91 @@
+{
+  "brainstorm_game": {
+    "user_interests": [
+      "Space Exploration",
+      "Board Games",
+      "Artificial Intelligence"
+    ],
+    "options_to_show": [
+      "Space-themed puzzle adventure",
+      "AI-powered trivia game",
+      "Board game with interstellar trading",
+      "Escape room in a virtual galaxy",
+      "AI that narrates your game story"
+    ],
+    "user_selected": [
+      "Space-themed puzzle adventure",
+      "Board game with interstellar trading"
+    ],
+    "game_concept": "A competitive space-trading board game where players solve AI-generated puzzles to gain resources and travel between planets."
+  },
+  "journal_system": {
+    "mood_check": "Motivated",
+    "important_tasks": {
+      "pre_generated": [
+        "Fix API bug",
+        "Write unit tests"
+      ],
+      "randomly_selected": [
+        "Update UI color scheme",
+        "Refactor database calls"
+      ]
+    },
+    "dashboard_graph": {
+      "current_objectives": [
+        {
+          "name": "Fix API bug",
+          "status": "in-progress"
+        },
+        {
+          "name": "Refactor database calls",
+          "status": "blocked"
+        }
+      ]
+    }
+  },
+  "jam_dashboard": {
+    "resources": [
+      {
+        "title": "Flask Docs",
+        "url": "https://flask.palletsprojects.com/en/stable/",
+        "type": "documentation"
+      },
+      {
+        "title": "React Docs",
+        "url": "https://react.dev/",
+        "type": "documentation"
+      },
+      {
+        "title": "MUI Masonry Layout",
+        "url": "https://mui.com/material-ui/react-masonry/",
+        "type": "ui-library"
+      }
+    ],
+    "graphs": {
+      "check_ins": [
+        5,
+        4,
+        6,
+        3,
+        7
+      ],
+      "code_size": [
+        1200,
+        1350,
+        1400,
+        1600,
+        1550
+      ]
+    },
+    "objective_cards": [
+      {
+        "title": "Update UI color scheme",
+        "color": "white"
+      },
+      {
+        "title": "Refactor database calls",
+        "color": "yellow"
+      }
+    ]
+  }
+}
