@@ -21,7 +21,8 @@ import {BarChart} from '@mui/x-charts/BarChart';
 import {Gauge, gaugeClasses} from '@mui/x-charts/Gauge';
 import DummyData from "./dummyData.ts";
 // import {LoremIpsum} from "react-lorem-ipsum";
-import type {ElementType} from "react";
+import axios from "axios";
+import {type ElementType, useEffect, useState} from "react";
 
 
 type firstContainer = {
@@ -247,31 +248,58 @@ const FourthContainer : fourthContainer[] = [
 ]
 
 const Container4 = () => {
+
+    const [array, setArray] = useState([])
+    const fetchApi = async () => {
+
+        try{
+            const response = await axios.get("http://127.0.0.1:5050/api/users")
+            setArray(response.data.users[0]);
+        }
+        catch(error){
+            console.error(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchApi()
+    }, []);
+
     return(
         <>
-            {FourthContainer.map((item, index) => (
-                <div key={index} className="w-[100%] bg-[#F4DFE4] rounded-2xl p-6">
-                    <div className="flex flex-row items-center gap-4">
-                        <div className="bg-[#FAF0F2] rounded-full size-[40px] flex justify-center items-center border border-gray-50 shadow-sm">
-                            <item.icon sx={{fontSize: "1.5rem"}}/>
-                        </div>
-                        <h2 className="text-2xl font-semibold">{item.title}</h2>
-                    </div>
-
-                    <div className="flex flex-col gap-4 mt-4">
-                        {item.description.map((item, index) => (
-                            <div key={index} className="bg-[#FAF0F2] p-4 rounded-2xl">
-                                <h3>{index + 1}</h3>
-                                <p className="text-gray-600 text-sm md:text-base">
-                                    {item}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-
+            <div className="bg-white border-[1.5px] border-gray-200 p-6 flex flex-col gap-4 rounded-2xl">
+                <div className="rounded-2xl">
+                    <h2><strong>Name:</strong> {array}</h2>
+                    <h2><strong>Discord UserName:</strong> N/A</h2>
+                    <h2><strong>Github Repo:</strong> <a href="https://github.com/ike005">github.com/ike005</a></h2>
+                    <h2>Todays Feeling: 😁</h2>
                 </div>
-                )
-            )}
+                <div className="flex flex-col lg:flex-row gap-6 md:gap-12">
+                    {FourthContainer.map((item, index) => (
+                            <div key={index} className="w-[100%] bg-[#F4DFE4] rounded-2xl p-6">
+                                <div className="flex flex-row items-center gap-4">
+                                    <div className="bg-[#FAF0F2] rounded-full size-[40px] flex justify-center items-center border border-gray-50 shadow-sm">
+                                        <item.icon sx={{fontSize: "1.5rem"}}/>
+                                    </div>
+                                    <h2 className="text-2xl font-semibold">{item.title}</h2>
+                                </div>
+
+                                <div className="flex flex-col gap-4 mt-4">
+                                    {item.description.map((item, index) => (
+                                        <div key={index} className="bg-[#FAF0F2] p-4 rounded-2xl">
+                                            <h3>{index + 1}</h3>
+                                            <p className="text-gray-600 text-sm md:text-base">
+                                                {item}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+
+                            </div>
+                        )
+                    )}
+                </div>
+            </div>
         </>
     )
 

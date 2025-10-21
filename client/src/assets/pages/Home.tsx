@@ -16,12 +16,13 @@ const Home = () => {
                     <Container1 />
                 </div>
 
-                <div className="flex flex-col lg:flex-row flex-wrap gap-4 min-h-[35rem] my-2 lg:my-4">
-                    <Container3/>
+                <div >
+                    {/*className="flex flex-col lg:flex-row gap-6 md:gap-12"*/}
+                    <Container4 />
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-6 md:gap-12">
-                    <Container4 />
+                <div className="flex flex-col lg:flex-row flex-wrap gap-4 min-h-[35rem] my-2 lg:my-4">
+                    <Container3/>
                 </div>
             </div>
         </div>
