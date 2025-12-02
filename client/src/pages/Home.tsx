@@ -1,9 +1,34 @@
 import {Container1, Container2, Container3, Container4} from '../components/Containers.tsx';
 import Navbar from "./navbar.tsx";
+import {useEffect, useState} from "react";
 
 
 
 const Home = () => {
+
+    const [usersData, setUsersData] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await fetch("http://127.0.0.1:8080/Users");
+                if (!response.ok) throw new Error("Failed to fetch database");
+
+                const jsonData = await response.json();
+                setUsersData(jsonData);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchData();
+    }, []);
+
+    if (loading) return <p>Loading dashboard...</p>;
+
     return(
         <>
         <div className="px-4 md:px-6 py-8 md:py-12 bg-[#111827]">
@@ -19,7 +44,7 @@ const Home = () => {
 
             <div className="flex flex-col gap-4 h-full">
                 <div className="flex flex-col md:flex-row gap-6">
-                    <Container1 />
+                    <Container1 usersData={usersData} />
                 </div>
 
 

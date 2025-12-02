@@ -21,7 +21,7 @@ import {BarChart} from '@mui/x-charts/BarChart';
 import {Gauge, gaugeClasses} from '@mui/x-charts/Gauge';
 // import DummyData from "./dummyData.ts";
 // import {LoremIpsum} from "react-lorem-ipsum";
-import type {ElementType} from "react";
+import {type ElementType} from "react";
 
 // import * as React from 'react';
 import Paper from '@mui/material/Paper';
@@ -34,32 +34,66 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {styled, tableCellClasses} from "@mui/material";
 
+// src/services/api.ts
 
-type firstContainer = {
-    icon : ElementType;
-    sectionName : string;
-    numberOfPeople : number | string;
+export async function apiData() {
+    const response = await fetch("http://127.0.0.1:8080/Users");
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch database");
+    }
+
+    const data = await response.json();
+    return data;
 }
 
-const FirstContainer : firstContainer[] =[
-    {
-        icon: PeopleAltSharpIcon,
-        sectionName: "Total Participants",
-        numberOfPeople: 30,
-    },
-    {
-        icon: PeopleAltSharpIcon,
-        sectionName: "Active Participants",
-        numberOfPeople: "20",
-    },
-    {
-        icon: AddReactionIcon,
-        sectionName: "Average Participants Feel",
-        numberOfPeople: "😊",
-    },
-]
+apiData();
 
-const Container1 = () => {
+
+interface Container1Props {
+    usersData?: any[]
+}
+
+const Container1 = ({usersData}: Container1Props) => {
+    // @ts-ignore
+    const totalParticipants = usersData.length;
+    const totalActiveParticipants = (usersData: any) => {
+        let currentDay = String(new Date().getDate()).padStart(2, '0');
+        let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+        let currentYear = new Date().getFullYear();
+
+        const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+        console.log(currentDate);
+
+        let active = 0;
+        for (let i = 0; i < usersData.length; i++) {
+            if (usersData[i].hasOwnProperty(currentDate)) {
+                active++;
+            }
+        }
+        return active;
+
+    }
+
+
+    const FirstContainer = [
+        {
+            icon: PeopleAltSharpIcon,
+            sectionName: "Total Participants",
+            numberOfPeople: ` ${totalParticipants}`,
+        },
+        {
+            icon: PeopleAltSharpIcon,
+            sectionName: "Active Participants",
+            numberOfPeople: ` ${totalActiveParticipants(usersData)}`,
+        },
+        {
+            icon: AddReactionIcon,
+            sectionName: "Average Participants Feel",
+            numberOfPeople: "😊",
+        },
+    ]
+
     return (
         <>
             {FirstContainer.map((item, index) => (
@@ -73,8 +107,9 @@ const Container1 = () => {
                             <h1 className="text-3xl font-bold">{item.numberOfPeople}</h1>
                         </div>
 
-                        <div className="bg-white rounded-full w-[40px] h-[40px] flex justify-center items-center border border-gray-50 shadow-sm">
-                            <item.icon fontSize="medium" />
+                        <div
+                            className="bg-white rounded-full w-[40px] h-[40px] flex justify-center items-center border border-gray-50 shadow-sm">
+                            <item.icon fontSize="medium"/>
                         </div>
                     </div>
                 </div>
@@ -83,7 +118,7 @@ const Container1 = () => {
     );
 };
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
@@ -93,7 +128,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(({theme}) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
     },
@@ -110,7 +145,7 @@ function createData(
     carbs: number,
     protein: number,
 ) {
-    return { name, calories, fat, carbs, protein };
+    return {name, calories, fat, carbs, protein};
 }
 
 const rows = [
@@ -139,9 +174,10 @@ const rows = [
 
 const Container2 = () => {
 
-    return(
+    return (
         <>
-            <div className="flex flex-col bg-[#1F2937] w-[100%] lg:w-[60%]  h-[80vh] overflow-scroll rounded-2xl p-4 gap-4">
+            <div
+                className="flex flex-col bg-[#1F2937] w-[100%] lg:w-[60%]  h-[80vh] overflow-scroll rounded-2xl p-4 gap-4">
                 <h3 className="text-base font-semibold text-[#FFFFFF]">Select Participant to Track</h3>
                 <div className="flex flex-col md:flex-row md:justify-between gap-2">
                     {/*md:max-w-1/3*/}
@@ -160,7 +196,7 @@ const Container2 = () => {
                         {/*</Stack>*/}
 
                         <TableContainer component={Paper}>
-                            <Table sx={{ maxWidth: '100%' }} aria-label="customized table">
+                            <Table sx={{maxWidth: '100%'}} aria-label="customized table">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell>Dessert (100g serving)</StyledTableCell>
@@ -196,7 +232,7 @@ const Container2 = () => {
 }
 
 
-const margin = { right: 24 };
+const margin = {right: 24};
 
 type secondContainer = {
     title: string;
@@ -212,7 +248,7 @@ type secondContainer = {
     }
 }
 
-const SecondContainer : secondContainer[] = [
+const SecondContainer: secondContainer[] = [
     {
         title: "Hackathon Usage",
         usage: 65,
@@ -245,12 +281,13 @@ const SecondContainer : secondContainer[] = [
 ]
 
 const Container3 = () => {
-    return(
+    return (
         <>
             {SecondContainer.map((item, index) => (
                 <div key={index} className="flex flex-col justify-between bg-[#1F2937] w-full flex-1 rounded-2xl gap-4">
                     <div className="flex justify-start items-center px-4 py-2 gap-2 rounded-t-2xl ">
-                        <div className="bg-white rounded-full size-[55px] flex justify-center items-center border border-gray-50 shadow-sm">
+                        <div
+                            className="bg-white rounded-full size-[55px] flex justify-center items-center border border-gray-50 shadow-sm">
                             <DataUsageIcon sx={{fontSize: "2rem"}}/>
                         </div>
                         <h2 className="font-semibold text-2xl">{item.title}</h2>
@@ -259,13 +296,14 @@ const Container3 = () => {
                     <div className="flex flex-col md:flex-row justify-center items-center h-full w-[100%] gap-2 p-4">
                         <div className="flex flex-col items-center h-full w-[100%] md:w-1/2">
                             <div className="h-[100%] md:h-[45%] w-[60%] md:w-[100%]">
-                                <Box sx={{ width: '100%', height: '100%' }}>
+                                <Box sx={{width: '100%', height: '100%'}}>
                                     <Gauge
                                         value={item.usage}
                                         startAngle={-110}
                                         endAngle={110}
-                                        text={({ value }) => `${value}%`}
-                                        sx={{[`& .${gaugeClasses.valueText}`]: {
+                                        text={({value}) => `${value}%`}
+                                        sx={{
+                                            [`& .${gaugeClasses.valueText}`]: {
                                                 fontSize: 40,
                                                 fontWeight: 'bold'
 
@@ -280,27 +318,28 @@ const Container3 = () => {
                                 </Box>
                             </div>
                             <div className="h-[100%] md:h-[45%] w-[100%]">
-                                <Box sx={{ width: '100%', height: '100%' }}>
+                                <Box sx={{width: '100%', height: '100%'}}>
                                     <BarChart
                                         series={[
-                                            { data: item.barChartData.data, label: 'Check-Ins', id: 'pvId' }
+                                            {data: item.barChartData.data, label: 'Check-Ins', id: 'pvId'}
                                         ]}
-                                        xAxis={[{ data: item.barChartData.label }]}
-                                        yAxis={[{ width: 0, disableLine: true, disableTicks: true}]}
+                                        xAxis={[{data: item.barChartData.label}]}
+                                        yAxis={[{width: 0, disableLine: true, disableTicks: true}]}
                                     />
                                 </Box>
                             </div>
                         </div>
-                        <div className="w-[100%] md:w-1/2 h-[100%] md:h-[45%] flex flex-col justify-center items-center">
+                        <div
+                            className="w-[100%] md:w-1/2 h-[100%] md:h-[45%] flex flex-col justify-center items-center">
 
-                            <Box sx={{ width: '100%', height: "100%" }}>
+                            <Box sx={{width: '100%', height: "100%"}}>
                                 <LineChart
                                     series={[
-                                        { data: item.lineChartData.dailyCheckInData, label: 'Motivation' },
-                                        { data: item.lineChartData.dailyMotivationData, label: 'Check-in' },
+                                        {data: item.lineChartData.dailyCheckInData, label: 'Motivation'},
+                                        {data: item.lineChartData.dailyMotivationData, label: 'Check-in'},
                                     ]}
-                                    xAxis={[{ scaleType: 'point', data: item.lineChartData.label }]}
-                                    yAxis={[{ width: 50 }]}
+                                    xAxis={[{scaleType: 'point', data: item.lineChartData.label}]}
+                                    yAxis={[{width: 50}]}
                                     margin={margin}
                                 />
                             </Box>
@@ -321,7 +360,7 @@ type fourthContainer = {
 
 }
 
-const FourthContainer : fourthContainer[] = [
+const FourthContainer: fourthContainer[] = [
     {
         title: "Reflection",
         icon: EmojiObjectsIcon,
@@ -340,14 +379,15 @@ const FourthContainer : fourthContainer[] = [
 ]
 
 const Container4 = () => {
-    return(
+    return (
         <>
 
             <div className="flex flex-col justify-between gap-2 md:gap-8 w-[100%] lg:w-[38%] max-h-[80vh]">
                 {FourthContainer.map((item, index) => (
                         <div key={index} className="w-[100%] bg-[#2B3544] rounded-2xl p-2 lg:p-6">
                             <div className="flex flex-row items-center gap-4">
-                                <div className="bg-[#FAF0F2] rounded-full size-[40px] flex justify-center items-center shadow-sm">
+                                <div
+                                    className="bg-[#FFFFFF] rounded-full size-[40px] flex justify-center items-center shadow-sm">
                                     <item.icon sx={{fontSize: "1.5rem"}}/>
                                 </div>
                                 <h2 className="text-2xl font-semibold">{item.title}</h2>
