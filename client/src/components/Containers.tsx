@@ -138,41 +138,89 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
     },
 }));
 
-function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-) {
-    return {name, calories, fat, carbs, protein};
+// function createData(
+//     name: string,
+//     gitHubLink: number,
+//     status: number,
+//     feeling: number,
+//     protein: number,
+// ) {
+//     return {name, gitHubLink, status, feeling, protein};
+// }
+//
+// const rows = [
+//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+//     createData('Eclair', 262, 16.0, 24, 6.0),
+//     createData('Cupcake', 305, 3.7, 67, 4.3),
+//     createData('Gingerbread', 356, 16.0, 49, 3.9),
+//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+//     createData('Eclair', 262, 16.0, 24, 6.0),
+//     createData('Cupcake', 305, 3.7, 67, 4.3),
+//     createData('Gingerbread', 356, 16.0, 49, 3.9),
+//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+//     createData('Eclair', 262, 16.0, 24, 6.0),
+//     createData('Cupcake', 305, 3.7, 67, 4.3),
+//     createData('Gingerbread', 356, 16.0, 49, 3.9),
+//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+//     createData('Eclair', 262, 16.0, 24, 6.0),
+//     createData('Cupcake', 305, 3.7, 67, 4.3),
+//     createData('Gingerbread', 356, 16.0, 49, 3.9),
+// ];
+
+
+// interface Participant {
+//     name: string;
+//     gitHubLink: string;
+//     status: string;
+//     feeling: string;
+//     action: string;
+// }
+//
+// const
+
+interface Container2Props {
+    usersData?: any[]
 }
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+const Container2 = ({usersData}: Container2Props) => {
 
+    const usersInfo = (usersData: any) => {
+        let currentDay = String(new Date().getDate()).padStart(2, '0');
+        let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+        let currentYear = new Date().getFullYear();
 
-const Container2 = () => {
+        const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+
+        const results = [];
+
+        for (let i = 0; i < usersData.length; i++) {
+
+            let active = false;
+            if (usersData[i].hasOwnProperty(currentDate)) {
+                active = true;
+            }
+            // "🔴 Inactive" "🟢 Active"
+            const user = {
+                name: usersData[i].user_name,
+                githubLink: usersData[i].github_link || 'https://github.com/ike005',
+                status: active ?  (
+                    <span className="bg-green-500 px-4 py-2 rounded-full text-white text-sm">Active</span>
+                ) : (
+                    <span className="bg-yellow-400 px-4 py-2 rounded-full text-white text-sm">Inactive</span>
+                ) ,
+                feeling: usersData[i][currentDate]?.user_feeling?.[0] || "N/A"
+            }
+
+            results.push(user);
+        }
+        return results;
+    }
+
+    const rows = usersInfo(usersData);
 
     return (
         <>
@@ -199,11 +247,11 @@ const Container2 = () => {
                             <Table sx={{maxWidth: '100%'}} aria-label="customized table">
                                 <TableHead>
                                     <TableRow>
-                                        <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                                        <StyledTableCell align="right">Calories</StyledTableCell>
-                                        <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                                        <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                                        <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                                        <StyledTableCell>Name</StyledTableCell>
+                                        <StyledTableCell align="left">GitHub Repo</StyledTableCell>
+                                        <StyledTableCell align="left">Status</StyledTableCell>
+                                        <StyledTableCell align="left">Feeling</StyledTableCell>
+                                        <StyledTableCell align="left">Action</StyledTableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -212,10 +260,16 @@ const Container2 = () => {
                                             <StyledTableCell component="th" scope="row">
                                                 {row.name}
                                             </StyledTableCell>
-                                            <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                            <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                            <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                                            <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                                            <StyledTableCell align="left">
+                                                <a href={row.githubLink}>{row.githubLink}</a>
+                                            </StyledTableCell>
+                                            <StyledTableCell align="left">{row.status}</StyledTableCell>
+                                            <StyledTableCell align="left">{row.feeling}</StyledTableCell>
+                                            <StyledTableCell align="left">
+                                                <button
+                                                    className="bg-[#82181A] px-4 py-2 rounded-md text-[#FFFFFF] text-md hover:cursor-pointer">Details
+                                                </button>
+                                            </StyledTableCell>
                                         </StyledTableRow>
                                     ))}
                                 </TableBody>
@@ -229,6 +283,67 @@ const Container2 = () => {
             </div>
         </>
     )
+}
+
+
+type fourthContainer = {
+    title: string;
+    icon: ElementType;
+    description: string[];
+
+}
+
+const FourthContainer: fourthContainer[] = [
+    {
+        title: "Reflection",
+        icon: EmojiObjectsIcon,
+        description: ["The team demonstrated excellent collaboration on the authentication module. Communication was clear and everyone contributed valuable insights."],
+    },
+    {
+        title: "Update",
+        icon: EmojiObjectsIcon,
+        description: ["The team demonstrated excellent collaboration on the authentication module. Communication was clear and everyone contributed valuable insights."],
+    },
+    {
+        title: "Reflection",
+        icon: EmojiObjectsIcon,
+        description: ["The team demonstrated excellent collaboration on the authentication module. Communication was clear and everyone contributed valuable insights."],
+    }
+]
+
+const Container3 = () => {
+    return (
+        <>
+
+            <div className="flex flex-col justify-between gap-2 md:gap-6 w-[100%] lg:w-[38%] h-[80vh] lg:h-fit bg-[#1F2937] px-8 py-12 rounded-2xl">
+                <h1 className="text-4xl text-[#FFFFFF] font-semibold">Reflections & Updates</h1>
+                {FourthContainer.map((item, index) => (
+                        <div key={index} className="w-[100%] h-full bg-[#2B3544] rounded-2xl p-2 lg:p-4">
+                            <div className="flex flex-row items-center gap-4">
+                                <div
+                                    className="bg-[#FFFFFF] rounded-full size-[40px] flex justify-center items-center shadow-sm">
+                                    <item.icon sx={{fontSize: "1.5rem"}}/>
+                                </div>
+                                <h2 className="text-2xl font-semibold text-[#FFFFFF]">{item.title}</h2>
+                            </div>
+
+                            <div className="flex flex-col gap-4 mt-2">
+                                {item.description.map((item, index) => (
+                                    <div key={index} className="p-4 rounded-2xl">
+                                        <h3>{index + 1}</h3>
+                                        <p className="text-gray-600 text-sm md:text-base">
+                                            {item}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )
+                )}
+            </div>
+        </>
+    )
+
 }
 
 
@@ -280,7 +395,7 @@ const SecondContainer: secondContainer[] = [
 
 ]
 
-const Container3 = () => {
+const Container4 = () => {
     return (
         <>
             {SecondContainer.map((item, index) => (
@@ -351,66 +466,6 @@ const Container3 = () => {
             ))}
         </>
     )
-}
-
-type fourthContainer = {
-    title: string;
-    icon: ElementType;
-    description: string[];
-
-}
-
-const FourthContainer: fourthContainer[] = [
-    {
-        title: "Reflection",
-        icon: EmojiObjectsIcon,
-        description: ["The team demonstrated excellent collaboration on the authentication module. Communication was clear and everyone contributed valuable insights."],
-    },
-    {
-        title: "Update",
-        icon: EmojiObjectsIcon,
-        description: ["The team demonstrated excellent collaboration on the authentication module. Communication was clear and everyone contributed valuable insights."],
-    },
-    {
-        title: "Reflection",
-        icon: EmojiObjectsIcon,
-        description: ["The team demonstrated excellent collaboration on the authentication module. Communication was clear and everyone contributed valuable insights."],
-    }
-]
-
-const Container4 = () => {
-    return (
-        <>
-
-            <div className="flex flex-col justify-between gap-2 md:gap-8 w-[100%] lg:w-[38%] max-h-[80vh]">
-                {FourthContainer.map((item, index) => (
-                        <div key={index} className="w-[100%] bg-[#2B3544] rounded-2xl p-2 lg:p-6">
-                            <div className="flex flex-row items-center gap-4">
-                                <div
-                                    className="bg-[#FFFFFF] rounded-full size-[40px] flex justify-center items-center shadow-sm">
-                                    <item.icon sx={{fontSize: "1.5rem"}}/>
-                                </div>
-                                <h2 className="text-2xl font-semibold">{item.title}</h2>
-                            </div>
-
-                            <div className="flex flex-col gap-4 mt-2">
-                                {item.description.map((item, index) => (
-                                    <div key={index} className="bg-[#2B3544] p-4 rounded-2xl">
-                                        <h3>{index + 1}</h3>
-                                        <p className="text-gray-600 text-sm md:text-base">
-                                            {item}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
-
-                        </div>
-                    )
-                )}
-            </div>
-        </>
-    )
-
 }
 
 export {Container1, Container2, Container3, Container4};
