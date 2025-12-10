@@ -138,50 +138,6 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
     },
 }));
 
-// function createData(
-//     name: string,
-//     gitHubLink: number,
-//     status: number,
-//     feeling: number,
-//     protein: number,
-// ) {
-//     return {name, gitHubLink, status, feeling, protein};
-// }
-//
-// const rows = [
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-// ];
-
-
-// interface Participant {
-//     name: string;
-//     gitHubLink: string;
-//     status: string;
-//     feeling: string;
-//     action: string;
-// }
-//
-// const
-
 interface Container2Props {
     usersData?: any[]
 }
@@ -203,7 +159,6 @@ const Container2 = ({usersData}: Container2Props) => {
             if (usersData[i].hasOwnProperty(currentDate)) {
                 active = true;
             }
-            // "🔴 Inactive" "🟢 Active"
             const user = {
                 name: usersData[i].user_name,
                 githubLink: usersData[i].github_link || 'https://github.com/ike005',
@@ -230,19 +185,6 @@ const Container2 = ({usersData}: Container2Props) => {
                 <div className="flex flex-col md:flex-row md:justify-between gap-2">
                     {/*md:max-w-1/3*/}
                     <div className="flex items-center w-full gap-2">
-                        {/*<Stack spacing={3} sx={{ width: '100%' }}>*/}
-                        {/*    <Autocomplete*/}
-                        {/*        options={DummyData}*/}
-                        {/*        getOptionLabel={(option) => option.label}*/}
-                        {/*        renderValue={(value, getItemProps) => (*/}
-                        {/*            <Chip label={value.label} {...getItemProps()} />*/}
-                        {/*        )}*/}
-                        {/*        renderInput={(params) => <TextField {...params} label="Participants" InputLabelProps={{*/}
-                        {/*            sx: { fontSize: "1rem", color: "#FFFFFF" }*/}
-                        {/*        }} />}*/}
-                        {/*    />*/}
-                        {/*</Stack>*/}
-
                         <TableContainer component={Paper}>
                             <Table sx={{maxWidth: '100%'}} aria-label="customized table">
                                 <TableHead>
