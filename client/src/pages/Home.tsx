@@ -44,17 +44,17 @@ const Home = () => {
 
             <div className="flex flex-col gap-4 h-full">
                 <div className="flex flex-col md:flex-row gap-6">
-                    <Container1 usersData={usersData} />
+                    <Container1 usersData={usersData}/>
                 </div>
 
 
                 <div className="flex flex-col gap-6 lg:flex-row w-[100%] justify-between my-6">
-                    <Container2 />
-                    <Container4 />
+                    <Container2 usersData={usersData}/>
+                    <Container3 usersData={usersData}/>
                 </div>
 
                 <div className="flex flex-col lg:flex-row flex-wrap gap-4 min-h-[35rem] my-2 lg:my-4">
-                    <Container3/>
+                    <Container4/>
                 </div>
             </div>
 
