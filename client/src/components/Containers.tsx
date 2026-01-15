@@ -36,18 +36,18 @@ import {styled, tableCellClasses} from "@mui/material";
 
 // src/services/api.ts
 
-export async function apiData() {
-    const response = await fetch("http://127.0.0.1:8080/Users");
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch database");
-    }
-
-    const data = await response.json();
-    return data;
-}
-
-apiData();
+// export async function apiData() {
+//     const response = await fetch("http://127.0.0.1:8080/Users");
+//
+//     if (!response.ok) {
+//         throw new Error("Failed to fetch database");
+//     }
+//
+//     const data = await response.json();
+//     return data;
+// }
+//
+// apiData();
 
 
 interface Container1Props {
@@ -57,12 +57,14 @@ interface Container1Props {
 const Container1 = ({usersData}: Container1Props) => {
     // @ts-ignore
     const totalParticipants = usersData.length;
-    const totalActiveParticipants = (usersData: any) => {
-        let currentDay = String(new Date().getDate()).padStart(2, '0');
-        let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
-        let currentYear = new Date().getFullYear();
+    let currentDay = String(new Date().getDate()).padStart(2, '0');
+    let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+    let currentYear = new Date().getFullYear();
 
-        const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+    const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+
+    const totalActiveParticipants = (usersData: any) => {
+
         console.log(currentDate);
 
         let active = 0;
@@ -73,6 +75,54 @@ const Container1 = ({usersData}: Container1Props) => {
         }
         return active;
 
+    }
+
+    const averageFeeling = (usersData: any) => {
+        const totalListedNumbers = []
+        for (let i = 0; i < usersData.length; i++) {
+            if (usersData[i].hasOwnProperty(currentDate)) {
+                switch (true) {
+                    case (usersData[i][currentDate].user_feeling[0] === "Super excited 😁"):
+                        totalListedNumbers.push(4);
+                        break;
+                    case (usersData[i][currentDate].user_feeling[0] === "Good 😊"):
+                        totalListedNumbers.push(3);
+                        break;
+                    case (usersData[i][currentDate].user_feeling[0] === "Okay 😐"):
+                        totalListedNumbers.push(2);
+                        break;
+                    case (usersData[i][currentDate].user_feeling[0] === "Stressed 😞"):
+                        totalListedNumbers.push(1);
+                        break;
+                    default:
+                        totalListedNumbers.push(0);
+                }
+            }
+        }
+
+        const totalAddedNumbers = totalListedNumbers.reduce((a, b) => a + b, 0);
+
+        const totalAverage = Math.round(totalAddedNumbers / usersData.length);
+        console.log(totalAverage);
+        console.log(totalListedNumbers);
+
+        let averageUserFeeling = "N/A";
+        switch (true) {
+            case (totalAverage === 4):
+                averageUserFeeling = "😁";
+                break;
+            case (totalAverage === 3):
+                averageUserFeeling = "😊";
+                break;
+            case (totalAverage === 2):
+                averageUserFeeling = "😐";
+                break;
+            case (totalAverage === 1):
+                averageUserFeeling = "😞";
+                break;
+        }
+
+        return averageUserFeeling;
     }
 
 
@@ -90,7 +140,7 @@ const Container1 = ({usersData}: Container1Props) => {
         {
             icon: AddReactionIcon,
             sectionName: "Average Participants Feel",
-            numberOfPeople: "😊",
+            numberOfPeople: ` ${averageFeeling(usersData)}`,
         },
     ]
 
@@ -253,7 +303,14 @@ const FourthContainer: fourthContainer[] = [
     }
 ]
 
+interface Container3Props {
+    usersData?: any[]
+}
+// {userData} : Container3Props
+
 const Container3 = () => {
+
+
     return (
         <>
 
