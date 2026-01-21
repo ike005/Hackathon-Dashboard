@@ -49,6 +49,29 @@ import {styled, tableCellClasses} from "@mui/material";
 //
 // apiData();
 
+function gettingActiveUsers(data: any) {
+    const totalParticipants = data.length;
+    let currentDay = String(new Date().getDate()).padStart(2, '0');
+    let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+    let currentYear = new Date().getFullYear();
+
+    const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+
+    const totalActiveParticipants = (data: any) => {
+
+        console.log(currentDate);
+
+        let active = 0;
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].hasOwnProperty(currentDate)) {
+                active++;
+            }
+        }
+        return active;
+    }
+
+    return {totalActiveParticipants, currentDate, totalParticipants};
+}
 
 interface Container1Props {
     usersData?: any[]
@@ -56,26 +79,27 @@ interface Container1Props {
 
 const Container1 = ({usersData}: Container1Props) => {
     // @ts-ignore
-    const totalParticipants = usersData.length;
-    let currentDay = String(new Date().getDate()).padStart(2, '0');
-    let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
-    let currentYear = new Date().getFullYear();
+    // const totalParticipants = usersData.length;
+    // let currentDay = String(new Date().getDate()).padStart(2, '0');
+    // let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+    // let currentYear = new Date().getFullYear();
+    //
+    // const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+    //
+    // const totalActiveParticipants = (usersData: any) => {
+    //
+    //     console.log(currentDate);
+    //
+    //     let active = 0;
+    //     for (let i = 0; i < usersData.length; i++) {
+    //         if (usersData[i].hasOwnProperty(currentDate)) {
+    //             active++;
+    //         }
+    //     }
+    //     return active;
+    // }
 
-    const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
-
-    const totalActiveParticipants = (usersData: any) => {
-
-        console.log(currentDate);
-
-        let active = 0;
-        for (let i = 0; i < usersData.length; i++) {
-            if (usersData[i].hasOwnProperty(currentDate)) {
-                active++;
-            }
-        }
-        return active;
-
-    }
+    const {totalActiveParticipants, currentDate, totalParticipants} = gettingActiveUsers(usersData);
 
     const averageFeeling = (usersData: any) => {
         const totalListedNumbers = []
@@ -103,8 +127,8 @@ const Container1 = ({usersData}: Container1Props) => {
         const totalAddedNumbers = totalListedNumbers.reduce((a, b) => a + b, 0);
 
         const totalAverage = Math.round(totalAddedNumbers / usersData.length);
-        console.log(totalAverage);
-        console.log(totalListedNumbers);
+        // console.log(totalAverage);
+        // console.log(totalListedNumbers);
 
         let averageUserFeeling = "N/A";
         switch (true) {
@@ -190,9 +214,10 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
 
 interface Container2Props {
     usersData?: any[]
+    onViewDetails?: (user: any) => void
 }
 
-const Container2 = ({usersData}: Container2Props) => {
+const Container2 = ({usersData, onViewDetails}: Container2Props) => {
 
     const usersInfo = (usersData: any) => {
         let currentDay = String(new Date().getDate()).padStart(2, '0');
@@ -212,12 +237,13 @@ const Container2 = ({usersData}: Container2Props) => {
             const user = {
                 name: usersData[i].user_name,
                 githubLink: usersData[i].github_link || 'https://github.com/ike005',
-                status: active ?  (
+                status: active ? (
                     <span className="bg-green-500 px-4 py-2 rounded-full text-white text-sm">Active</span>
                 ) : (
                     <span className="bg-yellow-400 px-4 py-2 rounded-full text-white text-sm">Inactive</span>
-                ) ,
-                feeling: usersData[i][currentDate]?.user_feeling?.[0] || "N/A"
+                ),
+                feeling: usersData[i][currentDate]?.user_feeling?.[0] || "N/A",
+                fullData: usersData[i]
             }
 
             results.push(user);
@@ -230,7 +256,8 @@ const Container2 = ({usersData}: Container2Props) => {
     return (
         <>
             <div
-                className="flex flex-col bg-[#1F2937] w-[100%] lg:w-[60%]  h-[80vh] overflow-scroll rounded-2xl p-4 gap-4">
+                // lg:w-[60%]
+                className="flex flex-col bg-[#1F2937] w-[100%] lg:w-[60%] min-h-[35vh] max-h-[50vh] overflow-scroll rounded-2xl p-4 gap-4">
                 <h3 className="text-base font-semibold text-[#FFFFFF]">Select Participant to Track</h3>
                 <div className="flex flex-col md:flex-row md:justify-between gap-2">
                     {/*md:max-w-1/3*/}
@@ -259,7 +286,8 @@ const Container2 = ({usersData}: Container2Props) => {
                                             <StyledTableCell align="left">{row.feeling}</StyledTableCell>
                                             <StyledTableCell align="left">
                                                 <button
-                                                    className="bg-[#82181A] px-4 py-2 rounded-md text-[#FFFFFF] text-md hover:cursor-pointer">Details
+                                                    onClick={() => onViewDetails?.(row.fullData)}
+                                                    className="bg-[#82181A] px-4 py-2 rounded-md text-[#FFFFFF] text-md hover:cursor-pointer hover:bg-[#9F1C1E] transition-colors">Details
                                                 </button>
                                             </StyledTableCell>
                                         </StyledTableRow>
@@ -271,6 +299,20 @@ const Container2 = ({usersData}: Container2Props) => {
                     {/*<div className="flex items-center">*/}
                     {/*    <p className="text-gray-600">Search by name or email to view individual metrics</p>*/}
                     {/*</div>*/}
+                </div>
+            </div>
+        </>
+    )
+}
+
+
+const Container3 = () => {
+    return (
+        <>
+            <div>
+                <div
+                    className="flex flex-col justify-between gap-4 md:gap-6 w-[100%] lg:w-[100%] h-[80vh] lg:h-fit bg-[#1F2937] px-8 py-12 rounded-2xl">
+                    <h1 className="text-4xl text-[#FFFFFF] font-semibold">Profile</h1>
                 </div>
             </div>
         </>
@@ -295,27 +337,24 @@ const FourthContainer: fourthContainer[] = [
         title: "Update",
         icon: EmojiObjectsIcon,
         description: ["The team demonstrated excellent collaboration on the authentication module. Communication was clear and everyone contributed valuable insights."],
-    },
-    {
-        title: "Reflection",
-        icon: EmojiObjectsIcon,
-        description: ["The team demonstrated excellent collaboration on the authentication module. Communication was clear and everyone contributed valuable insights."],
     }
 ]
 
-interface Container3Props {
-    usersData?: any[]
-}
+// interface Container3Props {
+//     usersData?: any[]
+// }
 // {userData} : Container3Props
 
-const Container3 = () => {
+const Container4 = () => {
 
 
     return (
         <>
 
-            <div className="flex flex-col justify-between gap-2 md:gap-6 w-[100%] lg:w-[38%] h-[80vh] lg:h-fit bg-[#1F2937] px-8 py-12 rounded-2xl">
+            <div
+                className="flex flex-col justify-between gap-2 md:gap-6 w-[100%] lg:w-[100%] h-[80vh] lg:h-fit bg-[#1F2937] px-8 py-12 rounded-2xl">
                 <h1 className="text-4xl text-[#FFFFFF] font-semibold">Reflections & Updates</h1>
+                <h2 className="text-green-600 bg-green-300 w-fit py-2 px-4 rounded-full font-bold">chibuike005</h2>
                 {FourthContainer.map((item, index) => (
                         <div key={index} className="w-[100%] h-full bg-[#2B3544] rounded-2xl p-2 lg:p-4">
                             <div className="flex flex-row items-center gap-4">
@@ -346,55 +385,68 @@ const Container3 = () => {
 }
 
 
-const margin = {right: 24};
 
-type secondContainer = {
-    title: string;
-    usage: number;
-    barChartData: {
-        label: string[];
-        data: number[];
-    };
-    lineChartData: {
-        label: string[];
-        dailyCheckInData: number[];
-        dailyMotivationData: number[];
-    }
+interface Container5Props {
+    usersData?: any[]
 }
 
-const SecondContainer: secondContainer[] = [
-    {
-        title: "Hackathon Usage",
-        usage: 65,
+const Container5 = ({usersData}: Container5Props) => {
+
+    const {totalActiveParticipants, totalParticipants} = gettingActiveUsers(usersData);
+    console.log(totalActiveParticipants);
+    console.log(totalParticipants);
+    let activeUserPercentage = Math.floor((totalActiveParticipants(usersData) / totalParticipants) * 100);
+    console.log(activeUserPercentage);
+
+    const margin = {right: 24};
+
+    type secondContainer = {
+        title: string;
+        usage: number;
         barChartData: {
-            label: ["M", "T", "W", "TH", "F", "ST", "S"],
-            data: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
-        },
+            label: string[];
+            data: number[];
+        };
         lineChartData: {
-            label: ["M", "T", "W", "TH", "F", "ST", "S"],
-            dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
-            dailyMotivationData: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
-        }
+            label: string[];
+            dailyCheckInData: number[];
+            dailyMotivationData: number[];
+        };
+        user?: any;
+    }
 
-    },
-    {
-        title: "Participant Usage",
-        usage: 20,
-        barChartData: {
-            label: ["M", "T", "W", "TH", "F", "ST", "S"],
-            data: [200, 1398, 9800, 3908, 4800, 6800, 4300]
+    const SecondContainer: secondContainer[] = [
+        {
+            title: "Hackathon Usage",
+            usage: activeUserPercentage,
+            barChartData: {
+                label: ["M", "T", "W", "TH", "F", "ST", "S"],
+                data: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
+            },
+            lineChartData: {
+                label: ["M", "T", "W", "TH", "F", "ST", "S"],
+                dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
+                dailyMotivationData: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
+            }
+
         },
-        lineChartData: {
-            label: ["M", "T", "W", "TH", "F", "ST", "S"],
-            dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
-            dailyMotivationData: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
-        }
+        {
+            title: "Participant Usage",
+            usage: 20,
+            barChartData: {
+                label: ["M", "T", "W", "TH", "F", "ST", "S"],
+                data: [200, 1398, 9800, 3908, 4800, 6800, 4300]
+            },
+            lineChartData: {
+                label: ["M", "T", "W", "TH", "F", "ST", "S"],
+                dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
+                dailyMotivationData: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
+            },
+            user: "chibuike005"
 
-    },
+        },
+    ]
 
-]
-
-const Container4 = () => {
     return (
         <>
             {SecondContainer.map((item, index) => (
@@ -405,6 +457,9 @@ const Container4 = () => {
                             <DataUsageIcon sx={{fontSize: "2rem"}}/>
                         </div>
                         <h2 className="font-semibold text-2xl">{item.title}</h2>
+                        {item.user &&
+                            <h2 className="text-green-600 bg-green-300 w-fit py-2 px-4 rounded-full font-bold">{item.user}</h2>
+                        }
                     </div>
 
                     <div className="flex flex-col md:flex-row justify-center items-center h-full w-[100%] gap-2 p-4">
@@ -425,8 +480,6 @@ const Container4 = () => {
                                             [`& .${gaugeClasses.valueArc}`]: {
                                                 fill: '#52b202'
                                             },
-
-
                                         }}
                                     />
                                 </Box>
@@ -467,4 +520,4 @@ const Container4 = () => {
     )
 }
 
-export {Container1, Container2, Container3, Container4};
+export {Container1, Container2, Container3, Container4, Container5};
