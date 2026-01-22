@@ -21,7 +21,7 @@ import {BarChart} from '@mui/x-charts/BarChart';
 import {Gauge, gaugeClasses} from '@mui/x-charts/Gauge';
 // import DummyData from "./dummyData.ts";
 // import {LoremIpsum} from "react-lorem-ipsum";
-import {type ElementType} from "react";
+import {type ElementType, useEffect, useState} from "react";
 
 // import * as React from 'react';
 import Paper from '@mui/material/Paper';
@@ -394,9 +394,20 @@ const Container5 = ({usersData}: Container5Props) => {
 
     const {totalActiveParticipants, totalParticipants} = gettingActiveUsers(usersData);
     console.log(totalActiveParticipants);
-    console.log(totalParticipants);
+
     let activeUserPercentage = Math.floor((totalActiveParticipants(usersData) / totalParticipants) * 100);
-    console.log(activeUserPercentage);
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % totalParticipants);
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, [totalParticipants]);
+
+
 
     const margin = {right: 24};
 
@@ -513,6 +524,21 @@ const Container5 = ({usersData}: Container5Props) => {
                         </div>
 
                     </div>
+
+                    {item.user &&
+                        <div className="flex flex-row w-full justify-center items-center gap-2 px-4 py-2 rounded-b-2xl">
+                            {Array.from({length: totalParticipants}).map((_, index) => (
+                                <div
+                                    key={index}
+                                    className={`h-[10px] rounded-full transition-all duration-500 ease-in-out ${
+                                        index === currentIndex ? "w-[2.4rem] bg-[#BA0C2F]" : "w-[10px] bg-[#FFA8A7]"
+                                    }`}
+                                ></div>
+                                )
+                            )}
+                        </div>
+
+                    }
 
                 </div>
             ))}
