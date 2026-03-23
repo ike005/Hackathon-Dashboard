@@ -16,8 +16,17 @@ import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 // import TableRow from '@mui/material/TableRow';
 import DataUsageIcon from '@mui/icons-material/DataUsage';
 import Box from '@mui/material/Box';
-import {LineChart} from '@mui/x-charts/LineChart';
+import {LineChart, lineElementClasses, markElementClasses,} from '@mui/x-charts/LineChart';
+import { axisClasses } from '@mui/x-charts';
 import {BarChart} from '@mui/x-charts/BarChart';
+import {
+    pieArcClasses,
+    PieChart,
+    pieClasses,
+} from '@mui/x-charts/PieChart';
+import { rainbowSurgePalette } from '@mui/x-charts/colorPalettes';
+import { useTheme } from '@mui/material/styles';
+
 import {Gauge, gaugeClasses} from '@mui/x-charts/Gauge';
 // import DummyData from "./dummyData.ts";
 // import {LoremIpsum} from "react-lorem-ipsum";
@@ -33,6 +42,8 @@ import TableHead from '@mui/material/TableHead';
 // import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import {styled, tableCellClasses} from "@mui/material";
+
+import { useNavigate } from "react-router-dom";
 
 // src/services/api.ts
 
@@ -72,6 +83,30 @@ function gettingActiveUsers(data: any) {
 
     return {totalActiveParticipants, currentDate, totalParticipants};
 }
+
+// function gettingActiveUsersForPreviousDay(data: any) {
+//     const totalParticipants = data.length;
+//     let currentDay = String(new Date().getDate()).padStart(2, '0');
+//     let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+//     let currentYear = new Date().getFullYear();
+//
+//     const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+//
+//     const totalActiveParticipants = (data: any) => {
+//
+//         console.log(currentDate);
+//
+//         let active = 0;
+//         for (let i = 0; i < data.length; i++) {
+//             if (data[i].hasOwnProperty(currentDate)) {
+//                 active++;
+//             }
+//         }
+//         return active;
+//     }
+//
+//     return {totalActiveParticipants, currentDate, totalParticipants};
+// }
 
 interface Container1Props {
     usersData?: any[]
@@ -149,22 +184,35 @@ const Container1 = ({usersData}: Container1Props) => {
         return averageUserFeeling;
     }
 
+    // const totalUserTrendRate = () = {
+    //
+    // }
+
 
     const FirstContainer = [
         {
             icon: PeopleAltSharpIcon,
-            sectionName: "Total Participants",
+            sectionName: "Total Users",
             numberOfPeople: ` ${totalParticipants}`,
+            bgColor: "#E6F1FD",
         },
         {
             icon: PeopleAltSharpIcon,
-            sectionName: "Active Participants",
+            sectionName: "Active Users",
             numberOfPeople: ` ${totalActiveParticipants(usersData)}`,
+            bgColor: "#EDEEFC",
         },
         {
             icon: AddReactionIcon,
-            sectionName: "Average Participants Feel",
+            sectionName: "Average User Feeling",
             numberOfPeople: ` ${averageFeeling(usersData)}`,
+            bgColor: "#E6F1FD",
+        },
+        {
+            icon: AddReactionIcon,
+            sectionName: "Total Lines of Code",
+            numberOfPeople: '12,000',
+            bgColor: "#EDEEFC",
         },
     ]
 
@@ -173,18 +221,23 @@ const Container1 = ({usersData}: Container1Props) => {
             {FirstContainer.map((item, index) => (
                 <div
                     key={index}
-                    className="flex flex-col justify-between bg-[#1F2937] w-full h-full rounded-2xl gap-4 p-6 hover:shadow-lg"
+                    className="flex flex-col justify-between w-full h-full rounded-3xl gap-4 p-6 hover:shadow-lg"
+                    style={{backgroundColor: item.bgColor}}
                 >
-                    <div className="flex justify-between items-center gap-4">
-                        <div className="flex flex-col items-start gap-2">
-                            <h3 className="text-gray-600 font-semibold text-sm">{item.sectionName}</h3>
-                            <h1 className="text-3xl font-bold">{item.numberOfPeople}</h1>
+                    <div className="flex items-center w-full gap-4">
+                        <div className="flex flex-col items-start w-full gap-2">
+                            <h3 className="text-[#000000] font-light text-md">{item.sectionName}</h3>
+                            <div className="flex flex-row justify-between w-[100%]">
+                                <h1 className="text-3xl font-bold text-[#000000]">{item.numberOfPeople}</h1>
+                                <item.icon fontSize="medium" className="text-[#9CA3AF]"/>
+                            </div>
+
                         </div>
 
-                        <div
-                            className="bg-white rounded-full w-[40px] h-[40px] flex justify-center items-center border border-gray-50 shadow-sm">
-                            <item.icon fontSize="medium"/>
-                        </div>
+                        {/*<div*/}
+                        {/*    className="bg-[#1C2332] rounded-full w-[40px] h-[40px] flex justify-center items-center shadow-sm">*/}
+                        {/*    <item.icon fontSize="medium" className="text-[#9CA3AF]"/>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
             ))}
@@ -214,10 +267,9 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
 
 interface Container2Props {
     usersData?: any[]
-    onViewDetails?: (user: any) => void
 }
 
-const Container2 = ({usersData, onViewDetails}: Container2Props) => {
+const Container2 = ({usersData}: Container2Props) => {
 
     const usersInfo = (usersData: any) => {
         let currentDay = String(new Date().getDate()).padStart(2, '0');
@@ -235,12 +287,13 @@ const Container2 = ({usersData, onViewDetails}: Container2Props) => {
                 active = true;
             }
             const user = {
+                id: usersData[i]._id,
                 name: usersData[i].user_name,
                 githubLink: usersData[i].github_link || 'https://github.com/ike005',
                 status: active ? (
-                    <span className="bg-green-500 px-4 py-2 rounded-full text-white text-sm">Active</span>
+                    <span className="bg-green-500/10 px-4 py-2 rounded-full text-green-500 text-sm border-2 border-500/20">ACTIVE</span>
                 ) : (
-                    <span className="bg-yellow-400 px-4 py-2 rounded-full text-white text-sm">Inactive</span>
+                    <span className="bg-yellow-500/10 px-4 py-2 rounded-full text-yellow-500 text-sm border-2 border-yellow-500/20">IDLE</span>
                 ),
                 feeling: usersData[i][currentDate]?.user_feeling?.[0] || "N/A",
                 fullData: usersData[i]
@@ -253,41 +306,44 @@ const Container2 = ({usersData, onViewDetails}: Container2Props) => {
 
     const rows = usersInfo(usersData);
 
+    const navigate = useNavigate();
+
     return (
         <>
             <div
                 // lg:w-[60%]
-                className="flex flex-col bg-[#1F2937] w-[100%] lg:w-[60%] min-h-[35vh] max-h-[50vh] overflow-scroll rounded-2xl p-4 gap-4">
-                <h3 className="text-base font-semibold text-[#FFFFFF]">Select Participant to Track</h3>
+                className="flex flex-col w-[100%] min-h-[35vh] max-h-[50vh] overflow-scroll rounded-2xl gap-4 border-2 border-[#282E38]">
+                {/*<h3 className="text-base font-semibold text-[#FFFFFF]">Select Participant to Track</h3>*/}
                 <div className="flex flex-col md:flex-row md:justify-between gap-2">
                     {/*md:max-w-1/3*/}
                     <div className="flex items-center w-full gap-2">
                         <TableContainer component={Paper}>
-                            <Table sx={{maxWidth: '100%'}} aria-label="customized table">
+                            <Table sx={{maxWidth: '100%'}} aria-label="customized table"  className="bg-[#111827]">
                                 <TableHead>
                                     <TableRow>
-                                        <StyledTableCell>Name</StyledTableCell>
-                                        <StyledTableCell align="left">GitHub Repo</StyledTableCell>
-                                        <StyledTableCell align="left">Status</StyledTableCell>
-                                        <StyledTableCell align="left">Feeling</StyledTableCell>
-                                        <StyledTableCell align="left">Action</StyledTableCell>
+                                        <StyledTableCell style={{backgroundColor: '#111827'}}>NAME</StyledTableCell>
+                                        <StyledTableCell align="left" style={{backgroundColor: '#111827'}}>STATUS</StyledTableCell>
+                                        <StyledTableCell align="left" style={{backgroundColor: '#111827'}}>FEELING</StyledTableCell>
+                                        <StyledTableCell align="left" style={{backgroundColor: '#111827'}}>REPO</StyledTableCell>
+                                        <StyledTableCell align="left" style={{backgroundColor: '#111827'}}>ACTION</StyledTableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {rows.map((row) => (
-                                        <StyledTableRow key={row.name}>
-                                            <StyledTableCell component="th" scope="row">
+                                        <StyledTableRow key={row.id}>
+                                            <StyledTableCell component="th" scope="row" style={{color: '#A1A6AD'}}>
                                                 {row.name}
                                             </StyledTableCell>
-                                            <StyledTableCell align="left">
+                                            <StyledTableCell align="left" style={{color: '#A1A6AD'}}>{row.status}</StyledTableCell>
+                                            <StyledTableCell align="left" style={{color: '#A1A6AD'}}>{row.feeling}</StyledTableCell>
+                                            <StyledTableCell align="left" style={{color: '#A1A6AD'}}>
                                                 <a href={row.githubLink}>{row.githubLink}</a>
                                             </StyledTableCell>
-                                            <StyledTableCell align="left">{row.status}</StyledTableCell>
-                                            <StyledTableCell align="left">{row.feeling}</StyledTableCell>
                                             <StyledTableCell align="left">
                                                 <button
-                                                    onClick={() => onViewDetails?.(row.fullData)}
-                                                    className="bg-[#82181A] px-4 py-2 rounded-md text-[#FFFFFF] text-md hover:cursor-pointer hover:bg-[#9F1C1E] transition-colors">Details
+                                                    // onClick={() => onViewDetails?.(row.fullData)}
+                                                    onClick={() => navigate(`/participant/${row.id}`)}
+                                                    className="bg-[#135BEC] px-4 py-2 rounded-md text-[#FFFFFF] text-md hover:cursor-pointer transition-colors">Details
                                                 </button>
                                             </StyledTableCell>
                                         </StyledTableRow>
@@ -409,6 +465,7 @@ const Container5 = ({usersData}: Container5Props) => {
 
 
 
+
     const margin = {right: 24};
 
     type secondContainer = {
@@ -427,123 +484,363 @@ const Container5 = ({usersData}: Container5Props) => {
     }
 
     const SecondContainer: secondContainer[] = [
-        {
-            title: "Hackathon Usage",
-            usage: activeUserPercentage,
-            barChartData: {
-                label: ["M", "T", "W", "TH", "F", "ST", "S"],
-                data: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
+            {
+                title: "Hackathon Usage",
+                usage: activeUserPercentage,
+                barChartData: {
+                    label: ["M", "T", "W", "TH", "F", "ST", "S"],
+                    data: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
+                },
+                lineChartData: {
+                    label: ["M", "T", "W", "TH", "F", "ST", "S"],
+                    dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
+                    dailyMotivationData: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
+                }
+
             },
+            {
+                title: "Participant Usage",
+                usage: 20,
+                barChartData: {
+                    label: ["M", "T", "W", "TH", "F", "ST", "S"],
+                    data: [200, 1398, 9800, 3908, 4800, 6800, 4300]
+                },
+                lineChartData: {
+                    label: ["M", "T", "W", "TH", "F", "ST", "S"],
+                    dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
+                    dailyMotivationData: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
+                },
+                user: "chibuike005"
+
+            },
+        ]
+
+        return (
+            <>
+                {SecondContainer.map((item, index) => (
+                    <div key={index} className="flex flex-col justify-between bg-[#1F2937] w-full flex-1 rounded-2xl gap-4">
+                        <div className="flex justify-start items-center px-4 py-2 gap-2 rounded-t-2xl ">
+                            <div
+                                className="bg-white rounded-full size-[55px] flex justify-center items-center border border-gray-50 shadow-sm">
+                                <DataUsageIcon sx={{fontSize: "2rem"}}/>
+                            </div>
+                            <h2 className="font-semibold text-2xl">{item.title}</h2>
+                            {item.user &&
+                                <h2 className="text-green-600 bg-green-300 w-fit py-2 px-4 rounded-full font-bold">{item.user}</h2>
+                            }
+                        </div>
+
+                        <div className="flex flex-col md:flex-row justify-center items-center h-full w-[100%] gap-2 p-4">
+                            <div className="flex flex-col items-center h-full w-[100%] md:w-1/2">
+                                <div className="h-[100%] md:h-[45%] w-[60%] md:w-[100%]">
+                                    <Box sx={{width: '100%', height: '100%'}}>
+                                        <Gauge
+                                            value={item.usage}
+                                            startAngle={-110}
+                                            endAngle={110}
+                                            text={({value}) => `${value}%`}
+                                            sx={{
+                                                [`& .${gaugeClasses.valueText}`]: {
+                                                    fontSize: 40,
+                                                    fontWeight: 'bold'
+
+                                                },
+                                                [`& .${gaugeClasses.valueArc}`]: {
+                                                    fill: '#52b202'
+                                                },
+                                            }}
+                                        />
+                                    </Box>
+                                </div>
+                                <div className="h-[100%] md:h-[45%] w-[100%]">
+                                    <Box sx={{width: '100%', height: '100%'}}>
+                                        <BarChart
+                                            series={[
+                                                {data: item.barChartData.data, label: 'Check-Ins', id: 'pvId'}
+                                            ]}
+                                            xAxis={[{data: item.barChartData.label}]}
+                                            yAxis={[{width: 0, disableLine: true, disableTicks: true}]}
+                                        />
+                                    </Box>
+                                </div>
+                            </div>
+                            <div
+                                className="w-[100%] md:w-1/2 h-[100%] md:h-[45%] flex flex-col justify-center items-center">
+
+                                <Box sx={{width: '100%', height: "100%"}}>
+                                    <LineChart
+                                        series={[
+                                            {data: item.lineChartData.dailyCheckInData, label: 'Motivation'},
+                                            {data: item.lineChartData.dailyMotivationData, label: 'Check-in'},
+                                        ]}
+                                        xAxis={[{scaleType: 'point', data: item.lineChartData.label}]}
+                                        yAxis={[{width: 50}]}
+                                        margin={margin}
+                                    />
+                                </Box>
+                            </div>
+
+                        </div>
+
+                        {item.user &&
+                            <div className="flex flex-row w-full justify-center items-center gap-2 px-4 py-2 rounded-b-2xl">
+                                {Array.from({length: totalParticipants}).map((_, index) => (
+                                        <div
+                                            key={index}
+                                            className={`h-[10px] rounded-full transition-all duration-500 ease-in-out ${
+                                                index === currentIndex ? "w-[2.4rem] bg-[#BA0C2F]" : "w-[10px] bg-[#FFA8A7]"
+                                            }`}
+                                        ></div>
+                                    )
+                                )}
+                            </div>
+
+                        }
+
+                    </div>
+                ))}
+            </>
+        )
+
+    }
+
+// these are the demo tables
+
+const Container6 = () => {
+
+
+    function totalActiveUsersTrend (data: any) {
+        const totalParticipants = data.length;
+        // let currentDay = String(new Date().getDate()).padStart(2, '0');
+        // let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+        // let currentYear = new Date().getFullYear();
+
+        // const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+
+        const totalActiveParticipants = (data: any) => {
+
+            console.log(currentDate);
+
+            let active = 0;
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].hasOwnProperty(currentDate)) {
+                    active++;
+                }
+            }
+            return active;
+        }
+
+
+
+        return {totalActiveParticipants, currentDate, totalParticipants};
+    }
+
+    const margin = {right: 24};
+
+    type sixthContainer = {
+        lineChartData: {
+            label: string[];
+            dailyCheckInData: number[];
+            dailyMotivationData: number[];
+        };
+    }
+
+    const SixthContainer: sixthContainer[] = [
+        {
             lineChartData: {
                 label: ["M", "T", "W", "TH", "F", "ST", "S"],
                 dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
                 dailyMotivationData: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
             }
-
-        },
-        {
-            title: "Participant Usage",
-            usage: 20,
-            barChartData: {
-                label: ["M", "T", "W", "TH", "F", "ST", "S"],
-                data: [200, 1398, 9800, 3908, 4800, 6800, 4300]
-            },
-            lineChartData: {
-                label: ["M", "T", "W", "TH", "F", "ST", "S"],
-                dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
-                dailyMotivationData: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
-            },
-            user: "chibuike005"
-
         },
     ]
 
-    return (
+
+    return(
         <>
-            {SecondContainer.map((item, index) => (
-                <div key={index} className="flex flex-col justify-between bg-[#1F2937] w-full flex-1 rounded-2xl gap-4">
-                    <div className="flex justify-start items-center px-4 py-2 gap-2 rounded-t-2xl ">
-                        <div
-                            className="bg-white rounded-full size-[55px] flex justify-center items-center border border-gray-50 shadow-sm">
-                            <DataUsageIcon sx={{fontSize: "2rem"}}/>
-                        </div>
-                        <h2 className="font-semibold text-2xl">{item.title}</h2>
-                        {item.user &&
-                            <h2 className="text-green-600 bg-green-300 w-fit py-2 px-4 rounded-full font-bold">{item.user}</h2>
-                        }
-                    </div>
+            <div className="w-[100%] h-[100%] flex flex-col justify-center items-center bg-[#1F2937] rounded-3xl">
+                <Box sx={{width: '100%', height: "100%"}}>
+                    <LineChart
 
-                    <div className="flex flex-col md:flex-row justify-center items-center h-full w-[100%] gap-2 p-4">
-                        <div className="flex flex-col items-center h-full w-[100%] md:w-1/2">
-                            <div className="h-[100%] md:h-[45%] w-[60%] md:w-[100%]">
-                                <Box sx={{width: '100%', height: '100%'}}>
-                                    <Gauge
-                                        value={item.usage}
-                                        startAngle={-110}
-                                        endAngle={110}
-                                        text={({value}) => `${value}%`}
-                                        sx={{
-                                            [`& .${gaugeClasses.valueText}`]: {
-                                                fontSize: 40,
-                                                fontWeight: 'bold'
+                        style={{width: "100%", height: "100%"}}
+                        series={[
+                            {data: SixthContainer[0].lineChartData.dailyCheckInData, label: 'Total Active Users', color: '#B6B6FB'},
+                            {data: SixthContainer[0].lineChartData.dailyMotivationData, label: 'Check-in', color: '#A1BCE8'},
+                        ]}
+                        xAxis={[{scaleType: 'point', data: SixthContainer[0].lineChartData.label}]}
+                        yAxis={[{width: 100}]}
+                        margin={margin}
 
-                                            },
-                                            [`& .${gaugeClasses.valueArc}`]: {
-                                                fill: '#52b202'
-                                            },
-                                        }}
-                                    />
-                                </Box>
-                            </div>
-                            <div className="h-[100%] md:h-[45%] w-[100%]">
-                                <Box sx={{width: '100%', height: '100%'}}>
-                                    <BarChart
-                                        series={[
-                                            {data: item.barChartData.data, label: 'Check-Ins', id: 'pvId'}
-                                        ]}
-                                        xAxis={[{data: item.barChartData.label}]}
-                                        yAxis={[{width: 0, disableLine: true, disableTicks: true}]}
-                                    />
-                                </Box>
-                            </div>
-                        </div>
-                        <div
-                            className="w-[100%] md:w-1/2 h-[100%] md:h-[45%] flex flex-col justify-center items-center">
+                        sx={{
+                            [`& .${lineElementClasses.root}`]: {
+                                strokeWidth: 3,
+                                // strokeDasharray: '5 5',
+                                text: 'red'
+                            },
+                            [`& .${markElementClasses.root}`]: {
+                                r: 4,
+                                fill: '#fff',
+                                strokeWidth: 2,
+                            },
+                            [`& .${axisClasses.tickLabel}`]: {
+                                fill: "#9CA3AF",
+                                fontSize: 12,
+                            },
+                            [`& .${axisClasses.line}`]: {
+                                stroke: "#6B7280",
+                                strokeWidth: 1
+                            },
+                        }}
 
-                            <Box sx={{width: '100%', height: "100%"}}>
-                                <LineChart
-                                    series={[
-                                        {data: item.lineChartData.dailyCheckInData, label: 'Motivation'},
-                                        {data: item.lineChartData.dailyMotivationData, label: 'Check-in'},
-                                    ]}
-                                    xAxis={[{scaleType: 'point', data: item.lineChartData.label}]}
-                                    yAxis={[{width: 50}]}
-                                    margin={margin}
-                                />
-                            </Box>
-                        </div>
 
-                    </div>
+                    />
+                </Box>
+            </div>
 
-                    {item.user &&
-                        <div className="flex flex-row w-full justify-center items-center gap-2 px-4 py-2 rounded-b-2xl">
-                            {Array.from({length: totalParticipants}).map((_, index) => (
-                                <div
-                                    key={index}
-                                    className={`h-[10px] rounded-full transition-all duration-500 ease-in-out ${
-                                        index === currentIndex ? "w-[2.4rem] bg-[#BA0C2F]" : "w-[10px] bg-[#FFA8A7]"
-                                    }`}
-                                ></div>
-                                )
-                            )}
-                        </div>
-
-                    }
-
-                </div>
-            ))}
         </>
-    )
+    );
 }
 
-export {Container1, Container2, Container3, Container4, Container5};
+interface Container7Props {
+    usersData?: any[]
+}
+
+const Container7 = ({usersData}: Container7Props) => {
+
+    const {totalActiveParticipants, totalParticipants} = gettingActiveUsers(usersData);
+    console.log(totalActiveParticipants);
+
+    let activeUserPercentage = Math.floor((totalActiveParticipants(usersData) / totalParticipants) * 100);
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % totalParticipants);
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, [totalParticipants]);
+
+
+    // const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
+    const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
+    const xLabels = [
+        'Page A',
+        'Page B',
+        'Page C',
+        'Page D',
+        'Page E',
+        'Page F',
+        'Page G',
+    ];
+
+    return (
+        <>
+            <div className="w-[48%] bg-[#1F2937] rounded-3xl">
+                <Box sx={{ width: '100%', height: 300 }}>
+                    <BarChart
+                        series={[
+                            { data: pData, label: 'pv', id: 'pvId', stack: 'total' },
+                            // { data: uData, label: 'uv', id: 'uvId', stack: 'total' },
+                        ]}
+                        xAxis={[{ data: xLabels, height: 28 }]}
+                        yAxis={[{ width: 50 }]}
+                    />
+                </Box>
+            </div>
+        </>
+    );
+
+const Container8 = () => {
+
+    const theme = useTheme();
+    const palette = rainbowSurgePalette(theme.palette.mode);
+    const data1 = [
+        { label: 'Group A', value: 400 },
+        { label: 'Group B', value: 300 },
+        { label: 'Group C', value: 300 },
+        { label: 'Group D', value: 200 },
+    ];
+    const data2 = [
+        { label: 'A1', value: 100, color: palette[0] },
+        { label: 'A2', value: 300, color: palette[0] },
+        { label: 'B1', value: 100, color: palette[1] },
+        { label: 'B2', value: 80, color: palette[1] },
+        { label: 'B3', value: 40, color: palette[1] },
+        { label: 'B4', value: 30, color: palette[1] },
+        { label: 'B5', value: 50, color: palette[1] },
+        { label: 'C1', value: 100, color: palette[2] },
+        { label: 'C2', value: 200, color: palette[2] },
+        { label: 'D1', value: 150, color: palette[3] },
+        { label: 'D2', value: 50, color: palette[3] },
+    ];
+
+    const settings = {
+        series: [
+            {
+                innerRadius: 0,
+                outerRadius: 80,
+                data: data1,
+                highlightScope: { fade: 'global', highlight: 'item' },
+            },
+            {
+                id: 'outer',
+                innerRadius: 100,
+                outerRadius: 120,
+                data: data2,
+                highlightScope: { fade: 'global', highlight: 'item' },
+            },
+        ],
+        height: 300,
+        hideLegend: true,
+    } satisfies PieChartProps;
+
+
+    return (
+        <>
+            <div className="w-[48%] bg-[#1F2937] rounded-3xl">
+                <PieChart
+                    {...settings}
+                    sx={{
+                        [`.${pieClasses.series}[data-series="outer"] .${pieArcClasses.root}`]: {
+                            opacity: 0.6,
+                        },
+                    }}
+                />
+            </div>
+        </>
+    );
+}
+
+const Container9 = () => {
+    const pData = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
+    const xLabels = [
+        'Page A',
+        'Page B',
+        'Page C',
+        'Page D',
+        'Page E',
+        'Page F',
+        'Page G',
+    ];
+
+    return (
+        <>
+            <div className="w-[100%] h-[100%]  bg-[#1F2937] rounded-3xl">
+                <Box sx={{ width: '100%', height: '100%' }}>
+                    <BarChart
+                        series={[
+                            { data: pData, label: 'pv', id: 'pvId', stack: 'total' },
+                            // { data: uData, label: 'uv', id: 'uvId', stack: 'total' },
+                        ]}
+                        xAxis={[{ data: xLabels, height: 28 }]}
+                        yAxis={[{ width: 50 }]}
+                    />
+                </Box>
+            </div>
+        </>
+    );
+}
+
+export {Container1, Container2, Container3, Container4, Container5, Container6, Container7, Container8, Container9};
