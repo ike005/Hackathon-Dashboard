@@ -1,4 +1,5 @@
 // import {Container2} from "../components/Containers.tsx";
+import Container1 from "../components/participants/Container1.tsx";
 import {useUsers} from "../hooks/useUsers.ts";
 import {useState} from "react";
 
@@ -11,7 +12,7 @@ const Participants = () => {
 
     const [searchParticipantValue, setSearchParticipantValue] = useState('');
 
-    const handleSearch = ( event) => {
+    const handleSearch = (event: any) => {
         event.preventDefault();
 
         const searchParticipantTerm = event.target.value;
@@ -40,10 +41,7 @@ const Participants = () => {
                     </div>
                 </div>
                 <div className="px-4 md:px-6 py-2 md:py-4 w-full">
-                    {/*{filteredUsersList.length > 0 ? <p className="text-[#AAAFB8]">participants found</p> : <p className="text-[#AAAFB8]">no participants found</p>}*/}
-                    {/*{usersData.length > 0 ? <p className="text-[#AAAFB8]">participants found</p> : <p className="text-[#AAAFB8]">no participants found</p>}*/}
-
-                    <Container2 usersData={(filteredUsersList.length > 0 ? filteredUsersList : usersData)}/>
+                    <Container1 usersData={(filteredUsersList.length > 0 ? filteredUsersList : usersData)}/>
                 </div>
             </div>
         </>
