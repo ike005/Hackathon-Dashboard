@@ -2,7 +2,7 @@ import {useTheme} from "@mui/material/styles";
 import {rainbowSurgePalette} from "@mui/x-charts/colorPalettes";
 import {pieArcClasses, PieChart, pieClasses} from "@mui/x-charts/PieChart";
 
-import type {Container4SideLabelInfo} from "../../types/types.ts"
+import type {Container4SideLabelInfo} from "../../types/overviewTypes.ts"
 
 function Container4 () {
 
@@ -70,7 +70,7 @@ function Container4 () {
 
     return (
         <>
-            <div className="w-[48%] bg-[#1F2937] rounded-3xl">
+            <div className="w-[48%] bg-[#1F2937] rounded-3xl flex flex-row">
                 <PieChart
                     {...settings}
                     sx={{
@@ -82,7 +82,7 @@ function Container4 () {
 
                 <div>
                     <div>
-                        <span></span>
+                        <div className="size-[1rem] bg-yellow-400 rounded-full"></div>
                         <h3 className="text-base font-semibold text-[#FFFFFF]">Feeling</h3>
                     </div>
 

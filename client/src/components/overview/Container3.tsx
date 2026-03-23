@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import {BarChart} from "@mui/x-charts/BarChart";
 
-import type {Container7Props} from "../../types/types.ts";
+import type {Container7Props} from "../../types/overviewTypes.ts";
 
 const Container3 = ({data}: Container7Props) => {
 

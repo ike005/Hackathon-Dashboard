@@ -1,6 +1,6 @@
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
-import type {Container1Props} from "../../types/types.ts";
+import type {Container1Props} from "../../types/overviewTypes.ts";
 
 import averageFeeling from "../../utils/averageFeeling.ts";
 import gettingActiveUsers from "../../utils/gettingActiveUsers.ts";

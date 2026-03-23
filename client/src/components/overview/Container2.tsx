@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import {LineChart} from "@mui/x-charts/LineChart";
-import type {secondContainer} from "../../types/types.ts";
+import type {secondContainer} from "../../types/overviewTypes.ts";
 
 
 const SecondContainer: secondContainer[] = [

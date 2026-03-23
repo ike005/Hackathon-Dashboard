@@ -17,7 +17,7 @@ const NavLinks = () => {
                 ${isActive ? ' bg-[#1F2937] rounded-lg' : ''}`
             }>Participants</NavLink>
 
-            <NavLink to="/2" className={({isActive}) =>
+            <NavLink to="/" className={({isActive}) =>
                 `px-6 py-2  cursor-pointer text-sm font-light text-[#FFFFFF]
                 ${isActive ? 'bg-[#1F2937] rounded-lg' : ''}`
             }>Settings</NavLink>
@@ -46,7 +46,7 @@ const NotificationLinks = () => {
                 ${isActive ? ' bg-[#1F2937] rounded-lg' : ''}`
             }>Participants</NavLink>
 
-            <NavLink to="/2" className={({isActive}) =>
+            <NavLink to="/" className={({isActive}) =>
                 `px-6 py-2  cursor-pointer text-sm font-light text-[#FFFFFF]
                 ${isActive ? 'bg-[#1F2937] rounded-lg' : ''}`
             }>Settings</NavLink>
