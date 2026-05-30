@@ -2,25 +2,38 @@ import Box from "@mui/material/Box";
 import {LineChart} from "@mui/x-charts/LineChart";
 import type {secondContainer} from "../../types/overviewTypes.ts";
 
+import {trackActiveUsers} from "../../utils/analytics.ts";
 
-const SecondContainer: secondContainer[] = [
-    {
-        lineChartData: {
-            label: ["M", "T", "W", "TH", "F", "ST", "S"],
-            dailyCheckInData: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
-            dailyCodeCommits: [2400, 1398, 9800, 3908, 4800, 3800, 4300],
-            dailyCodeCommits2: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
-        }
-    },
-]
+type Container2Props = { dailyLogData: any[] };
 
-function Container2 () {
+
+function Container2 (dailyLogData: Container2Props) {
+
+    const daysData = trackActiveUsers(dailyLogData);
+
+    const dateSort = daysData.dictArray.sort((a: any, b: any) => new Date(a.Key).getTime() - new Date(b.Key).getTime());
+
+
+
+
+    const SecondContainer: secondContainer[] = [
+        {
+            lineChartData: {
+                label: dateSort.map((day: any) => day.Key),
+                dailyCheckInData: dateSort.map((day: any) => day.Value),
+                dailyCodeCommits: [2400, 1398, 9800, 3908, 4800, 3800, 4300],
+                dailyCodeCommits2: [2400, 1398, 9800, 3908, 4800, 3800, 4300]
+            }
+        },
+    ]
     // @ts-ignore
     return(
         <>
-            <div className="w-[100%] h-[100%] flex flex-col justify-center items-center bg-[#1F2937] rounded-3xl">
-                <Box sx={{ width: '100%', height: '100%' }}>
+            <div className="w-[100%] h-[100%] flex flex-col justify-center items-center bg-[#FFFFFF] rounded-3xl border-2 border-[#C9C6D9]">
+                <Box sx={{ width: '100%', height: '100%', minHeight: 0 }}>
                     <LineChart
+                        height={500}
+
                         series={[
                             { data: SecondContainer[0].lineChartData.dailyCheckInData, label: 'Check Ins', yAxisId: 'leftAxisId' },
                             { data: SecondContainer[0].lineChartData.dailyCodeCommits, label: 'Code Commits', yAxisId: 'rightAxisId' },
@@ -29,17 +42,17 @@ function Container2 () {
                             data: SecondContainer[0].lineChartData.label,
                             height: 28,
                             scaleType: 'point',
-                            tickLabelStyle: {fill: '#FFFFFF', fontSize: 12, fontWeight: 'normal'},
+                            tickLabelStyle: {fill: '#000000', fontSize: 12, fontWeight: 'normal'},
                         }]}
                         yAxis={[
-                            { id: 'leftAxisId', width: 50, tickLabelStyle: {fill: '#FFFFFF', fontSize: 12, fontWeight: 'normal'},},
-                            { id: 'rightAxisId', position: 'right', tickLabelStyle: {fill: '#FFFFFF', fontSize: 12, fontWeight: 'normal'}},
+                            { id: 'leftAxisId', width: 50, tickLabelStyle: {fill: '#000000', fontSize: 12, fontWeight: 'normal'}, min: 0, tickInterval: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],},
+                            { id: 'rightAxisId', position: 'right', tickLabelStyle: {fill: '#000000', fontSize: 12, fontWeight: 'normal'}},
                         ]}
                         slotProps={{
                             legend: {
                                 sx: {
                                     '& .MuiChartsLegend-label': {
-                                        color: '#FFFFFF',
+                                        color: '#000000',
                                     },
                                 },
                             },

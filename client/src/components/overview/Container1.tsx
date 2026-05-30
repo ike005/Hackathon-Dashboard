@@ -2,12 +2,18 @@ import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
 import type {Container1Props} from "../../types/overviewTypes.ts";
 
-import averageFeeling from "../../utils/averageFeeling.ts";
+import {averageUserFeeling, feelingPercentage} from "../../utils/feelingLogic.ts";
 import gettingActiveUsers from "../../utils/gettingActiveUsers.ts";
+import {trackActiveUsers} from "../../utils/analytics.ts";
 
-function Container1 ({usersData}: Container1Props) {
 
-    const {totalActiveParticipants, currentDate, totalParticipants} = gettingActiveUsers(usersData);
+
+function Container1 ({usersData, dailyLogData}: Container1Props) {
+
+    const {totalParticipants} = gettingActiveUsers(usersData);
+    const currentActiveUsers = trackActiveUsers({ dailyLogData });
+    const {averageFeeling } = averageUserFeeling(dailyLogData);
+    feelingPercentage(dailyLogData);
 
     const FirstContainer = [
         {
@@ -19,19 +25,25 @@ function Container1 ({usersData}: Container1Props) {
         {
             icon: PeopleAltSharpIcon,
             sectionName: "Active Users",
-            numberOfPeople: ` ${totalActiveParticipants(usersData)}`,
+            numberOfPeople: `${currentActiveUsers.currentlyActiveUsers}`,
             bgColor: "#EDEEFC",
         },
         {
             icon: AddReactionIcon,
             sectionName: "Average User Feeling",
-            numberOfPeople: ` ${averageFeeling(usersData, currentDate)}`,
+            numberOfPeople: ` ${averageFeeling}`,
             bgColor: "#E6F1FD",
         },
+        // {
+        //     icon: AddReactionIcon,
+        //     sectionName: "Total Lines of Code",
+        //     numberOfPeople: '12,000',
+        //     bgColor: "#EDEEFC",
+        // },
         {
             icon: AddReactionIcon,
-            sectionName: "Total Lines of Code",
-            numberOfPeople: '12,000',
+            sectionName: "Checkin Percentage",
+            numberOfPeople: ` ${(currentActiveUsers.currentlyActiveUsers / totalParticipants * 100).toFixed(1)}%`,
             bgColor: "#EDEEFC",
         },
     ]

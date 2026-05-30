@@ -1,10 +1,8 @@
+import getCurrentDate from "./currentDate";
+
 function gettingActiveUsers(data: any) {
     const totalParticipants = data.length;
-    let currentDay = String(new Date().getDate()).padStart(2, '0');
-    let currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
-    let currentYear = new Date().getFullYear();
-
-    const currentDate = `${currentYear}-${currentMonth}-${currentDay}`;
+    const currentDate = getCurrentDate();
 
     const totalActiveParticipants = (data: any) => {
         let active = 0;
@@ -15,7 +13,7 @@ function gettingActiveUsers(data: any) {
         }
         return active;
     }
-
+    // console.log(data);
     return {totalActiveParticipants, currentDate, totalParticipants};
 }
 
