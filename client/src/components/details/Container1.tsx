@@ -32,7 +32,7 @@ const Container1 = ({usersData}: Container1Props) => {
                                         <StyledTableCell style={{backgroundColor: '#F0F3FF', color: '#000000', textAlign: 'center', fontWeight: 'bold'}}>Name</StyledTableCell>
                                         <StyledTableCell align="left" style={{backgroundColor: '#F0F3FF', color: '#000000', textAlign: 'center', fontWeight: 'bold'}}>Repo</StyledTableCell>
                                         <StyledTableCell align="left" style={{backgroundColor: '#F0F3FF', color: '#000000', textAlign: 'center', fontWeight: 'bold'}}>Email</StyledTableCell>
-                                        <StyledTableCell align="left" style={{backgroundColor: '#F0F3FF', color: '#000000', textAlign: 'center', fontWeight: 'bold'}}>Status</StyledTableCell>
+                                        <StyledTableCell align="left" style={{backgroundColor: '#F0F3FF', color: '#000000', textAlign: 'center', fontWeight: 'bold'}}>Gender</StyledTableCell>
                                         <StyledTableCell align="left" style={{backgroundColor: '#F0F3FF', color: '#000000', textAlign: 'center', fontWeight: 'bold'}}>Info</StyledTableCell>
                                     </TableRow>
                                 </TableHead>
@@ -51,7 +51,7 @@ const Container1 = ({usersData}: Container1Props) => {
                                             </StyledTableCell>
 
                                             <StyledTableCell align="left" style={{color: '#000000', textAlign: 'center'}}>{row.email}</StyledTableCell>
-                                            <StyledTableCell align="left" style={{color: '#A1A6AD', textAlign: 'center'}}>{row.status}</StyledTableCell>
+                                            <StyledTableCell align="left" style={{color: '#000000', textAlign: 'center'}}>{row.gender}</StyledTableCell>
                                             <StyledTableCell align="left" style={{ textAlign: 'center'}}>
                                                 <button
                                                     // onClick={() => onViewDetails?.(row.fullData)}

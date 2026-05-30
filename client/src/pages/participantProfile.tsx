@@ -6,6 +6,7 @@ import {useAllDataPoints} from "../hooks/useAllDataPoints.ts";
 
 
 import StepperContainer from "../components/participantprofile/StepperContainer.tsx";
+import IdeaStepperContainer from "../components/participantprofile/IdeaStepperContainer.tsx";
 
 const ParticipantProfile = () => {
 
@@ -14,7 +15,7 @@ const ParticipantProfile = () => {
     return (
         <div className="flex flex-col h-[100vh] w-full bg-[#F9F9FF] overflow-auto">
 
-            <div className=" p-6">
+            <div className="flex flex-row p-6 justify-between items-center">
 
                 <div className=" flex flex-row gap-10">
 
@@ -30,7 +31,7 @@ const ParticipantProfile = () => {
 
                         <p className="flex flex-row items-center">
                             <SquareTerminal className="mr-1 size-6 text-[#000000] font-semibold" strokeWidth={2.5}/>
-                            <Link to={"/"} className="text-base">https://github.com/ike005</Link>
+                            <Link to={"/"} className="text-base">{usersData?.profile_info?.github_link}</Link>
                         </p>
 
                         <div className="flex flex-row gap-4 items-center">
@@ -44,17 +45,25 @@ const ParticipantProfile = () => {
 
                 </div>
 
-                <div></div>
+                <div className=" w-fit h-[100%]">
+                    <div className="flex flex-col">
+                        <p className="text-base"><span className="font-semibold">Discord ID:</span> {usersData?.profile_info?.user_id}</p>
+                        <p className="text-base"><span className="font-semibold">Discord Username:</span> {usersData?.profile_info?.username}</p>
+                        <p className="text-base"><span className="font-semibold">Email:</span> {usersData?.profile_info?.email}</p>
+                        <p className="text-base"><span className="font-semibold">Gender:</span> {usersData?.profile_info?.gender}</p>
+
+                    </div>
+                </div>
 
             </div>
 
-            <div className="flex flex-row w-full p-6" >
-                <div className="flex flex-col gap-10 w-[70%] h-[calc(100vh-6rem)] overflow-auto">
-                    <StepperContainer/>
+            <div className="flex flex-row w-full p-6 justify-between items-center" >
+                <div className="flex flex-col gap-10 w-[62%] h-[calc(100vh-6rem)] overflow-auto">
+                    <StepperContainer usersData={usersData}/>
                 </div>
 
-                <div className="flex flex-col gap-10 w-[30%] bg-green-500 h-[100%]">
-
+                <div className="flex flex-col gap-10 w-[35%] h-[calc(100vh-6rem)] overflow-auto">
+                    <IdeaStepperContainer usersData={usersData}/>
                 </div>
             </div>
 
