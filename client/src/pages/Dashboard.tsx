@@ -19,7 +19,7 @@ const Dashboard = () => {
     return(
         <>
             <div className="h-[100vh] w-full">
-                <div className="flex flex-col gap-4 px-4 md:px-6 py-4 md:py-6 w-full h-[calc(105vh-6rem)] overflow-auto bg-[#F9F9FF]">
+                <div className="flex flex-col gap-4 px-4 md:px-6 py-4 md:py-6 w-full h-[calc(118vh-6rem)] overflow-auto bg-[#F9F9FF]">
 
                     <div className="flex flex-row justify-between gap-2 pb-4">
                         <h1 className="text-1xl md:text-2xl lg:text-5xl  font-bold text-[#000000]">Overview</h1>
