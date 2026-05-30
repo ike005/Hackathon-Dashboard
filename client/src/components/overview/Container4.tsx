@@ -2,17 +2,20 @@ import {useTheme} from "@mui/material/styles";
 import {rainbowSurgePalette} from "@mui/x-charts/colorPalettes";
 import {pieArcClasses, PieChart, pieClasses} from "@mui/x-charts/PieChart";
 
-import type {Container4SideLabelInfo} from "../../types/overviewTypes.ts"
+import {feelingPercentage} from "../../utils/feelingLogic.ts";
 
-function Container4 () {
+type Container2Props = { dailyLogData: any[] };
+
+function Container4 ({dailyLogData}: Container2Props) {
+    const {percentageSuperExcited, percentageGood, percentageOkay, percentageStressed} = feelingPercentage(dailyLogData);
 
     const theme = useTheme();
     const palette = rainbowSurgePalette(theme.palette.mode);
     const data1 = [
-        { label: 'Group A', value: 400 },
-        { label: 'Group B', value: 300 },
-        { label: 'Group C', value: 300 },
-        { label: 'Group D', value: 200 },
+        { label: 'Super excited', value: `${percentageSuperExcited}` },
+        { label: 'Good', value: `${percentageGood}` },
+        { label: 'Okay', value: `${percentageOkay}` },
+        { label: 'Stressed', value:  `${percentageStressed}` },
     ];
     const data2 = [
         { label: 'A1', value: 100, color: palette[0] },
@@ -48,43 +51,47 @@ function Container4 () {
         hideLegend: true,
     } satisfies PieChartProps;
 
-    const sideLabelInfo: Container4SideLabelInfo = [
+    // Container4SideLabelInfo
+    const sideLabelInfo = [
         {
             label: 'Super excited 😁',
-            color: '#FF0000',
+            color: '#4F65FF',
         },
         {
             label: 'Good 😊',
-            color: '#FF0000',
+            color: '#0DBEFF',
         },
         {
             label: 'Okay 😐',
-            color: '#FF0000',
+            color: '#FFB422',
         },
         {
             label: 'Stressed 😞',
-            color: '#FF0000',
+            color: '#FA4F58',
         }
     ]
 
 
     return (
         <>
-            <div className="w-[48%] bg-[#1F2937] rounded-3xl flex flex-row">
+            <div className="w-[100%] bg-[#FFFFFF] border-2 border-[#C9C6D9] rounded-3xl flex flex-col">
                 <PieChart
                     {...settings}
                     sx={{
                         [`.${pieClasses.series}[data-series="outer"] .${pieArcClasses.root}`]: {
                             opacity: 0.6,
                         },
+                        // backgroundColor: 'red'
                     }}
                 />
 
-                <div>
-                    <div>
-                        <div className="size-[1rem] bg-yellow-400 rounded-full"></div>
-                        <h3 className="text-base font-semibold text-[#FFFFFF]">Feeling</h3>
-                    </div>
+                <div className="flex flex-row justify-center items-center px-4 py-2 gap-6">
+                    {sideLabelInfo.map((item, index) => (
+                        <div key={index} className="flex flex-col items-center gap-1">
+                            <div className="size-[1rem] rounded-full" style={{backgroundColor: item.color}}></div>
+                            <h3 className="text-base font-bold text-[#000000]">{item.label}</h3>
+                        </div>
+                    ))}
 
                 </div>
             </div>

@@ -136,7 +136,7 @@
 //
 //     const {totalActiveParticipants, currentDate, totalParticipants} = gettingActiveUsers(usersData);
 //
-//     const averageFeeling = (usersData: any) => {
+//     const feelingLogic = (usersData: any) => {
 //         const totalListedNumbers = []
 //         for (let i = 0; i < usersData.length; i++) {
 //             if (usersData[i].hasOwnProperty(currentDate)) {
@@ -205,7 +205,7 @@
 //         {
 //             icon: AddReactionIcon,
 //             sectionName: "Average User Feeling",
-//             numberOfPeople: ` ${averageFeeling(usersData)}`,
+//             numberOfPeople: ` ${feelingLogic(usersData)}`,
 //             bgColor: "#E6F1FD",
 //         },
 //         {

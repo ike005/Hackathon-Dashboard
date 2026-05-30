@@ -1,5 +1,6 @@
 export interface Container1Props{
-    usersData: any;
+    usersData: any[];
+    dailyLogData?: any[];
 }
 
 export interface secondContainer {
@@ -10,6 +11,8 @@ export interface secondContainer {
         dailyCodeCommits2: number[];
     };
 }
+
+
 
 export interface Container7Props {
     data?: any[]
