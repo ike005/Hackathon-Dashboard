@@ -89,7 +89,7 @@ function Container4 ({dailyLogData}: Container2Props) {
                     {sideLabelInfo.map((item, index) => (
                         <div key={index} className="flex flex-col items-center gap-1">
                             <div className="size-[1rem] rounded-full" style={{backgroundColor: item.color}}></div>
-                            <h3 className="text-base font-bold text-[#000000]">{item.label}</h3>
+                            <h3 className="text-sm font-bold text-[#000000]">{item.label}</h3>
                         </div>
                     ))}
 

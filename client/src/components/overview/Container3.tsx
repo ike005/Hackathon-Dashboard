@@ -34,7 +34,7 @@ const Container3 = ({dailyLogData}: Container2Props) => {
 
     return (
         <>
-            <div className="w-[100%] bg-[#FFFFFF] rounded-3xl border-2 border-[#C9C6D9]">
+            <div className="w-[100%] bg-[#FFFFFF] rounded-3xl border-2 border-[#C9C6D9] flex justify-center items-center">
                 <Box sx={{width: '100%', height: 300}}>
                     <BarChart
                         series={[

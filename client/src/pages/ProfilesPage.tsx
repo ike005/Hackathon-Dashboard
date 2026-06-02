@@ -1,14 +1,12 @@
 import {Link} from "react-router-dom";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { FaRegUserCircle } from "react-icons/fa";
 import {User, SquareTerminal} from "lucide-react"
 import {useAllDataPoints} from "../hooks/useAllDataPoints.ts";
 
 
-import StepperContainer from "../components/participantprofile/StepperContainer.tsx";
-import IdeaStepperContainer from "../components/participantprofile/IdeaStepperContainer.tsx";
+import StepperContainer from "../components/profilepage/StepperContainer.tsx";
+import IdeaStepperContainer from "../components/profilepage/IdeaStepperContainer.tsx";
 
-const ParticipantProfile = () => {
+const ProfilesPage = () => {
 
     const {usersData} = useAllDataPoints();
 
@@ -26,12 +24,12 @@ const ParticipantProfile = () => {
                     <div className="flex flex-col justify-between">
                         <div className="flex flex-row gap-4 justify-between items-center">
                             <h1 className="text-4xl font-bold tracking-wide">{usersData?.profile_info?.name}</h1>
-                            <div className="bg-[#87F2E4] px-4 rounded-2xl text-[#000000] font-semibold text-xl">ACTIVE</div>
+                            {/*<div className="bg-[#87F2E4] px-4 rounded-2xl text-[#000000] font-semibold text-xl">ACTIVE</div>*/}
                         </div>
 
                         <p className="flex flex-row items-center">
                             <SquareTerminal className="mr-1 size-6 text-[#000000] font-semibold" strokeWidth={2.5}/>
-                            <Link to={"/"} className="text-base">{usersData?.profile_info?.github_link}</Link>
+                            <a href={usersData?.profile_info?.github_link} target="_blank" rel="noopener noreferrer" className="text-base">{usersData?.profile_info?.github_link}</a>
                         </p>
 
                         <div className="flex flex-row gap-4 items-center">
@@ -71,6 +69,5 @@ const ParticipantProfile = () => {
         </div>
     );
 }
-// C9C6D9
 
-export default ParticipantProfile;
+export default ProfilesPage;
