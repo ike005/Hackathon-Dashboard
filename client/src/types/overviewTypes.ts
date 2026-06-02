@@ -12,8 +12,6 @@ export interface secondContainer {
     };
 }
 
-
-
 export interface Container7Props {
     data?: any[]
 }

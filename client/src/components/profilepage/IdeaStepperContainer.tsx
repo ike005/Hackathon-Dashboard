@@ -7,7 +7,6 @@ type StepperProps = { usersData: any };
 
 export default function IdeaStepperContainer({usersData}: StepperProps) {
 
-    // const brainstormingData = usersData?.brainstorming_ideas;
     const brainstormingData = [...(usersData?.brainstorming_ideas || [])].sort(
         (a, b) =>
             new Date(b.log_date).getTime() -

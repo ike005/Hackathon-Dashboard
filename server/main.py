@@ -76,23 +76,15 @@ def get_brainstorming_ideas():
 @app.route("/api/users/<user_id>", methods=["GET"])
 def get_user_by_id(user_id):
 
-    # Single user profile
     user_profile_info = db.users_new.find_one({"user_id": user_id})
 
-    # Multiple records
-    user_daily_log = list(
-        db.daily_log.find({"user_id": int(user_id)})
-    )
+    user_daily_log = list(db.daily_log.find({"user_id": int(user_id)}))
 
-    user_brainstorming_ideas = list(
-        db.brainstorming.find({"user_id": int(user_id)})
-    )
+    user_brainstorming_ideas = list(db.brainstorming.find({"user_id": int(user_id)}))
 
-    # User must exist
     if not user_profile_info:
         return jsonify({"error": "User not found"}), 404
 
-    # Convert ObjectId
     user_profile_info["_id"] = str(user_profile_info["_id"])
 
     for log in user_daily_log:

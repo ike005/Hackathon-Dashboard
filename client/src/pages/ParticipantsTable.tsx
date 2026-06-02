@@ -1,15 +1,12 @@
-// import {Container2} from "../components/Containers.tsx";
-import Container1 from "../components/details/Container1.tsx";
+import Container1 from "../components/participantstable/Container1.tsx";
 import {useUsers} from "../hooks/useUsers.ts";
 import {useState} from "react";
 import {ListFilter, ArrowDownUp} from "lucide-react"
 
 import SearchIcon from '@mui/icons-material/Search';
-// import data from "./testUserData.json"
 
 const Participants = () => {
     const {usersData} = useUsers();
-    // const usersData = data;
 
     const [filteredUsersList, setFilteredUsersList] = useState<any>([]);
 
@@ -55,17 +52,17 @@ const Participants = () => {
                             </p>
                         </div>
 
-                        <div className="flex flex-row gap-2">
-                            <button className="bg-[#F9F9FF] hover:bg-[#135BEC] px-4 py-2 rounded-lg text-[#000000] hover:text-[#FFFFFF] border-2 border-[#C9C6D9] text-md font-semibold hover:cursor-pointer transition-colors flex flex-row items-center cursor-pointer">
-                                <ListFilter strokeWidth={3} className="mr-1 size-4"/>
-                                Filters
-                            </button>
+                        {/*<div className="flex flex-row gap-2">*/}
+                        {/*    <button className="bg-[#F9F9FF] hover:bg-[#135BEC] px-4 py-2 rounded-lg text-[#000000] hover:text-[#FFFFFF] border-2 border-[#C9C6D9] text-md font-semibold hover:cursor-pointer transition-colors flex flex-row items-center cursor-pointer">*/}
+                        {/*        <ListFilter strokeWidth={3} className="mr-1 size-4"/>*/}
+                        {/*        Filters*/}
+                        {/*    </button>*/}
 
-                            <button className="bg-[#F9F9FF] hover:bg-[#135BEC] px-4 py-2 rounded-lg text-[#000000] hover:text-[#FFFFFF] border-2 border-[#C9C6D9] text-md font-semibold hover:cursor-pointer transition-colors flex flex-row items-center cursor-pointer">
-                                <ArrowDownUp strokeWidth={3} className="mr-1 size-4"/>
-                                Sort
-                            </button>
-                        </div>
+                        {/*    <button className="bg-[#F9F9FF] hover:bg-[#135BEC] px-4 py-2 rounded-lg text-[#000000] hover:text-[#FFFFFF] border-2 border-[#C9C6D9] text-md font-semibold hover:cursor-pointer transition-colors flex flex-row items-center cursor-pointer">*/}
+                        {/*        <ArrowDownUp strokeWidth={3} className="mr-1 size-4"/>*/}
+                        {/*        Sort*/}
+                        {/*    </button>*/}
+                        {/*</div>*/}
                     </div>
                     <Container1 usersData={(filteredUsersList.length > 0 ? filteredUsersList : usersData)}/>
                 </div>

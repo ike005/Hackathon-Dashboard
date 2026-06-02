@@ -1,8 +1,9 @@
 import Dashboard from './pages/Dashboard.tsx';
-import Details from './pages/details.tsx';
+import Details from './pages/ParticipantsTable.tsx';
 import {Routes, Route} from "react-router-dom";
 import Navbar from "./components/navbar.tsx";
-import ParticipantProfile from "./pages/participantProfile.tsx";
+import ProfilesPage from "./pages/ProfilesPage.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 
 function App() {
@@ -19,7 +20,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Dashboard />}/>
                 <Route path="/participant" element={<Details />}/>
-                <Route path="/participant/:user_id" element={<ParticipantProfile/>} />
+                <Route path="/participant/:user_id" element={<ProfilesPage/>} />
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </div>
     </>

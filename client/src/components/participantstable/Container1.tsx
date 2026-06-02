@@ -44,10 +44,10 @@ const Container1 = ({usersData}: Container1Props) => {
                                             </StyledTableCell>
 
                                             <StyledTableCell align="left" style={{ color: "#A1A6AD", textAlign: "center" }}>
-                                                <Link to={row.githubLink} className="inline-flex items-center gap-2 no-underline text-[#135BEC] hover:text-[#3726CD]">
+                                                <a href={row.githubLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 no-underline text-[#135BEC] hover:text-[#3726CD]">
                                                     <Link2 size={16} />
                                                     <span>{row.githubLink}</span>
-                                                </Link>
+                                                </a>
                                             </StyledTableCell>
 
                                             <StyledTableCell align="left" style={{color: '#000000', textAlign: 'center'}}>{row.email}</StyledTableCell>

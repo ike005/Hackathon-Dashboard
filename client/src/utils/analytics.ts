@@ -45,17 +45,4 @@ function trackActiveUsers(data: any) {
 
 }
 
-
-// function trackOneActiveUser(data: any) {
-//     const currentDate = getCurrentDate();
-//
-//     for (let i = 0; i < data?.daily_log?.length; i++) {
-//         if (data.daily_log[i].log_date === currentDate) {
-//             return true;
-//         }
-//     }
-//
-//     return false;
-// }
-
 export { trackHacathonDaysDate, trackActiveUsers };

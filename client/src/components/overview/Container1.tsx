@@ -34,12 +34,6 @@ function Container1 ({usersData, dailyLogData}: Container1Props) {
             numberOfPeople: ` ${averageFeeling}`,
             bgColor: "#E6F1FD",
         },
-        // {
-        //     icon: AddReactionIcon,
-        //     sectionName: "Total Lines of Code",
-        //     numberOfPeople: '12,000',
-        //     bgColor: "#EDEEFC",
-        // },
         {
             icon: AddReactionIcon,
             sectionName: "Checkin Percentage",
