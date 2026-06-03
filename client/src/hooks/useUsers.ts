@@ -21,7 +21,7 @@ export function useUsers() {
             }
         }
 
-        fetchData();
+        setInterval(fetchData, 500)
     }, []);
 
 
