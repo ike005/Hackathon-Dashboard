@@ -24,8 +24,6 @@ export function useUsers() {
         fetchData();
     }, []);
 
-    console.log(usersData[0]);
-
 
     return { usersData, loading} ;
 }
