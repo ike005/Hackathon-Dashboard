@@ -10,7 +10,6 @@ export function useDailyLog() {
         async function fetchData() {
             try {
                 const response = await fetch(`${baseUrl}/api/users/daily_log`);
-                console.log(response);
                 if (!response.ok) throw new Error("Failed to fetch database");
 
                 const jsonData = await response.json();
