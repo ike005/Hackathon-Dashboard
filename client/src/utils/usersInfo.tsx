@@ -1,8 +1,5 @@
-import getCurrentDate from "./currentDate";
-
 
 const usersInfo = (usersData: any) => {
-    const currentDate = getCurrentDate();
 
     const results = [];
 

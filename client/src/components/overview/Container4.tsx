@@ -1,6 +1,6 @@
 import {useTheme} from "@mui/material/styles";
 import {rainbowSurgePalette} from "@mui/x-charts/colorPalettes";
-import {pieArcClasses, PieChart, pieClasses} from "@mui/x-charts/PieChart";
+import {pieArcClasses, PieChart, type PieChartProps, pieClasses} from "@mui/x-charts/PieChart";
 
 import {feelingPercentage} from "../../utils/feelingLogic.ts";
 
@@ -12,10 +12,10 @@ function Container4 ({dailyLogData}: Container2Props) {
     const theme = useTheme();
     const palette = rainbowSurgePalette(theme.palette.mode);
     const data1 = [
-        { label: 'Super excited', value: `${percentageSuperExcited}` },
-        { label: 'Good', value: `${percentageGood}` },
-        { label: 'Okay', value: `${percentageOkay}` },
-        { label: 'Stressed', value:  `${percentageStressed}` },
+        { label: 'Super excited', value: Number(percentageSuperExcited) },
+        { label: 'Good', value: Number(percentageGood) },
+        { label: 'Okay', value: Number(percentageOkay) },
+        { label: 'Stressed', value:  Number(percentageStressed) },
     ];
     const data2 = [
         { label: 'A1', value: 100, color: palette[0] },

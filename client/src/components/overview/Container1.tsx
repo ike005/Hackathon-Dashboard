@@ -12,8 +12,8 @@ function Container1 ({usersData, dailyLogData}: Container1Props) {
 
     const {totalParticipants} = gettingActiveUsers(usersData);
     const currentActiveUsers = trackActiveUsers({ dailyLogData });
-    const {averageFeeling } = averageUserFeeling(dailyLogData);
-    feelingPercentage(dailyLogData);
+    const {averageFeeling } = averageUserFeeling(dailyLogData ?? []);
+    feelingPercentage(dailyLogData ?? []);
 
     const FirstContainer = [
         {

@@ -46,12 +46,12 @@ export default function IdeaStepperContainer({usersData}: StepperProps) {
         >
             {brainstormingData?.map((item, index) => (
                 <div key={index} className="bg-[#FFFFFF] flex flex-col gap-2 p-4 justify-center rounded-lg border-2 border-[#C9C6D9]">
-                    <Typography level="title-sm text-[#135BEC]">{item.log_date}</Typography>
+                    <Typography level="title-sm"><span className="text-[#135BEC]">{item.log_date}</span></Typography>
 
                     <div className="bg-[#F0F3FF] rounded-lg p-4 flex flex-col gap-2">
                         <h2 className="font-semibold text-lg text-[#135BEC]">Brainstorming Ideas</h2>
                         <ul className="list-disc pl-5">
-                            {item.user_interests?.map((idea, index) => (
+                            {item.user_interests?.map((idea: any, index: number) => (
                                 <li key={index} className="italic text-sm font-light">
                                     {idea}
                                 </li>

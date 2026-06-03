@@ -1,4 +1,3 @@
-import {Link} from "react-router-dom";
 import {User, SquareTerminal} from "lucide-react"
 import {useAllDataPoints} from "../hooks/useAllDataPoints.ts";
 
@@ -6,9 +5,22 @@ import {useAllDataPoints} from "../hooks/useAllDataPoints.ts";
 import StepperContainer from "../components/profilepage/StepperContainer.tsx";
 import IdeaStepperContainer from "../components/profilepage/IdeaStepperContainer.tsx";
 
+type ProfileInfo = {
+    name?: string;
+    github_link?: string;
+    user_id?: string;
+    username?: string;
+    email?: string;
+    gender?: string;
+};
+
+
+type UserData = { profile_info?: ProfileInfo };
+
+
 const ProfilesPage = () => {
 
-    const {usersData} = useAllDataPoints();
+    const {usersData} = useAllDataPoints() as { usersData: UserData };
 
     return (
         <div className="flex flex-col h-[100vh] w-full bg-[#F9F9FF] overflow-auto">
