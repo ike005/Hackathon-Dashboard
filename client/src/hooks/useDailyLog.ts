@@ -21,7 +21,7 @@ export function useDailyLog() {
             }
         }
 
-        fetchData();
+        setInterval(fetchData, 500)
     }, []);
 
     return { usersDailyLogData, loading} ;

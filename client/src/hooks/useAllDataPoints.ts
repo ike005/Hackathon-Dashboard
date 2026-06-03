@@ -24,7 +24,7 @@ export function useAllDataPoints() {
             }
         }
 
-        fetchData();
+        setInterval(fetchData, 500)
     }, []);
 
 
