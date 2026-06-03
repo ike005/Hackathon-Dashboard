@@ -56,18 +56,19 @@ export default function StepperContainer({usersData}: StepperProps) {
                     }
                 >
                     <div className="bg-[#FFFFFF] flex flex-col gap-2 p-4 justify-center rounded-lg border-2 border-[#C9C6D9]">
-                        <Typography level="title-sm text-[#135BEC]">{item.log_date}</Typography>
+                        <Typography level="title-sm"><span className="text-[#135BEC]">{item.log_date}</span></Typography>
 
                         <div className="bg-[#F0F3FF] rounded-lg p-4 flex flex-col gap-2">
                             <h2 className="font-semibold text-lg text-[#135BEC]">User Task</h2>
                             <ul className="list-disc pl-5">
-                                {item.user_tasks?.map((idea, index) => (
+                                {item.user_tasks?.map((idea: any, index: number) => (
                                     <li key={index} className="italic text-sm font-light">
                                         {idea}
                                     </li>
                                 ))}
                             </ul>
                         </div>
+
 
                         <div className="bg-[#F0F3FF] rounded-lg p-4 flex flex-col gap-2">
                             <h2 className="font-semibold text-lg text-[#135BEC]">User Feeling in Text</h2>

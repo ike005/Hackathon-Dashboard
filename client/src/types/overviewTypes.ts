@@ -20,3 +20,12 @@ export interface Container4SideLabelInfo {
     label: string;
     value: number;
 }
+
+export interface ProfileInfo {
+    name?: string;
+    github_link?: string;
+    user_id?: string;
+    username?: string;
+    email?: string;
+    gender?: string;
+}
