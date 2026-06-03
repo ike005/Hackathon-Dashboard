@@ -1,5 +1,4 @@
 // src/pages/NotFound.tsx
-import React from 'react';
 import { Box, Button, Typography, Stack } from '@mui/material';
 import { useTheme, alpha } from '@mui/material/styles';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';

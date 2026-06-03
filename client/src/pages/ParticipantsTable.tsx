@@ -1,7 +1,7 @@
 import Container1 from "../components/participantstable/Container1.tsx";
 import {useUsers} from "../hooks/useUsers.ts";
 import {useState} from "react";
-import {ListFilter, ArrowDownUp} from "lucide-react"
+// import {ListFilter, ArrowDownUp} from "lucide-react"
 
 import SearchIcon from '@mui/icons-material/Search';
 
