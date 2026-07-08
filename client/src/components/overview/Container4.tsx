@@ -1,4 +1,5 @@
 import {useTheme} from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import {rainbowSurgePalette} from "@mui/x-charts/colorPalettes";
 import {pieArcClasses, PieChart, type PieChartProps, pieClasses} from "@mui/x-charts/PieChart";
 
@@ -10,6 +11,12 @@ function Container4 ({dailyLogData}: Container2Props) {
     const {percentageSuperExcited, percentageGood, percentageOkay, percentageStressed} = feelingPercentage(dailyLogData);
 
     const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const chartHeight = isMobile ? 240 : 300;
+    const outerRadius = isMobile ? 60 : 80;
+    const outerRingInner = isMobile ? 75 : 100;
+    const outerRingOuter = isMobile ? 90 : 120;
+
     const palette = rainbowSurgePalette(theme.palette.mode);
     const data1 = [
         { label: 'Super excited', value: Number(percentageSuperExcited) },
@@ -35,19 +42,19 @@ function Container4 ({dailyLogData}: Container2Props) {
         series: [
             {
                 innerRadius: 0,
-                outerRadius: 80,
+                outerRadius: outerRadius,
                 data: data1,
                 highlightScope: { fade: 'global', highlight: 'item' },
             },
             {
                 id: 'outer',
-                innerRadius: 100,
-                outerRadius: 120,
+                innerRadius: outerRingInner,
+                outerRadius: outerRingOuter,
                 data: data2,
                 highlightScope: { fade: 'global', highlight: 'item' },
             },
         ],
-        height: 300,
+        height: chartHeight,
         hideLegend: true,
     } satisfies PieChartProps;
 
@@ -74,22 +81,21 @@ function Container4 ({dailyLogData}: Container2Props) {
 
     return (
         <>
-            <div className="w-[100%] bg-[#FFFFFF] border-2 border-[#C9C6D9] rounded-3xl flex flex-col">
+            <div className="w-full bg-[#FFFFFF] border-2 border-[#C9C6D9] rounded-2xl md:rounded-3xl flex flex-col overflow-hidden">
                 <PieChart
                     {...settings}
                     sx={{
                         [`.${pieClasses.series}[data-series="outer"] .${pieArcClasses.root}`]: {
                             opacity: 0.6,
                         },
-                        // backgroundColor: 'red'
                     }}
                 />
 
-                <div className="flex flex-row justify-center items-center px-4 py-2 gap-6">
+                <div className="flex flex-row flex-wrap justify-center items-center px-3 sm:px-4 py-3 sm:py-4 gap-3 sm:gap-4 md:gap-6">
                     {sideLabelInfo.map((item, index) => (
-                        <div key={index} className="flex flex-col items-center gap-1">
-                            <div className="size-[1rem] rounded-full" style={{backgroundColor: item.color}}></div>
-                            <h3 className="text-sm font-bold text-[#000000]">{item.label}</h3>
+                        <div key={index} className="flex flex-col items-center gap-1 min-w-[4.5rem]">
+                            <div className="size-3 sm:size-4 rounded-full" style={{backgroundColor: item.color}}></div>
+                            <h3 className="text-xs sm:text-sm font-bold text-[#000000] text-center">{item.label}</h3>
                         </div>
                     ))}
 

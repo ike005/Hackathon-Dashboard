@@ -23,56 +23,58 @@ const ProfilesPage = () => {
     const {usersData} = useAllDataPoints() as { usersData: UserData };
 
     return (
-        <div className="flex flex-col h-[100vh] w-full bg-[#F9F9FF] overflow-auto">
+        <div className="flex flex-col min-h-[calc(100vh-3.5rem)] lg:min-h-screen w-full bg-[#F9F9FF] overflow-auto">
 
-            <div className="flex flex-row p-6 justify-between items-center">
+            <div className="flex flex-col lg:flex-row p-4 sm:p-6 gap-6 xl:justify-between xl:items-start">
 
-                <div className=" flex flex-row gap-10">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 min-w-0">
 
-                    <div className="border-2 border-[#000000] rounded-lg size-[8rem] flex justify-center items-center">
-                        <User className="text-[#000000] size-16"/>
+                    <div className="border-2 border-[#000000] rounded-lg size-24 sm:size-28 lg:size-[8rem] shrink-0 flex justify-center items-center mx-auto sm:mx-0">
+                        <User className="text-[#000000] size-10 sm:size-12 lg:size-16"/>
                     </div>
 
-                    <div className="flex flex-col justify-between">
-                        <div className="flex flex-row gap-4 justify-between items-center">
-                            <h1 className="text-4xl font-bold tracking-wide">{usersData?.profile_info?.name}</h1>
-                            {/*<div className="bg-[#87F2E4] px-4 rounded-2xl text-[#000000] font-semibold text-xl">ACTIVE</div>*/}
+                    <div className="flex flex-col justify-between gap-3 min-w-0 text-center sm:text-left">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:justify-between sm:items-center">
+                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-wide break-words">{usersData?.profile_info?.name}</h1>
                         </div>
 
-                        <p className="flex flex-row items-center">
-                            <SquareTerminal className="mr-1 size-6 text-[#000000] font-semibold" strokeWidth={2.5}/>
-                            <a href={usersData?.profile_info?.github_link} target="_blank" rel="noopener noreferrer" className="text-base">{usersData?.profile_info?.github_link}</a>
+                        <p className="flex flex-row items-center justify-center sm:justify-start min-w-0">
+                            <SquareTerminal className="mr-1 size-5 sm:size-6 text-[#000000] font-semibold shrink-0" strokeWidth={2.5}/>
+                            <a href={usersData?.profile_info?.github_link} target="_blank" rel="noopener noreferrer" className="text-sm sm:text-base truncate">{usersData?.profile_info?.github_link}</a>
                         </p>
 
-                        <div className="flex flex-row gap-4 items-center">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center sm:items-center justify-center sm:justify-start">
 
-                            <p> <span className="text-[#135BEC] font-semibold">2/2</span> Checkins</p>
+                            <p className="text-sm sm:text-base"> <span className="text-[#135BEC] font-semibold">2/2</span> Checkins</p>
 
-                            <p>😁 todays feeling</p>
+                            <p className="text-sm sm:text-base">😁 todays feeling</p>
 
                         </div>
                     </div>
 
                 </div>
 
-                <div className=" w-fit h-[100%]">
-                    <div className="flex flex-col">
-                        <p className="text-base"><span className="font-semibold">Discord ID:</span> {usersData?.profile_info?.user_id}</p>
-                        <p className="text-base"><span className="font-semibold">Discord Username:</span> {usersData?.profile_info?.username}</p>
-                        <p className="text-base"><span className="font-semibold">Email:</span> {usersData?.profile_info?.email}</p>
-                        <p className="text-base"><span className="font-semibold">Gender:</span> {usersData?.profile_info?.gender}</p>
+                <div className="w-full xl:w-fit xl:max-w-md shrink-0">
+                    <div className="flex flex-col gap-1 text-sm sm:text-base text-center lg:text-left">
+                        <p><span className="font-semibold">Discord ID:</span> {usersData?.profile_info?.user_id}</p>
+                        <p><span className="font-semibold">Discord Username:</span> {usersData?.profile_info?.username}</p>
+                        <p className="break-all"><span className="font-semibold">Email:</span> {usersData?.profile_info?.email}</p>
+                        <p><span className="font-semibold">Gender:</span> {usersData?.profile_info?.gender}</p>
 
                     </div>
                 </div>
 
             </div>
 
-            <div className="flex flex-row w-full p-6 justify-between items-center" >
-                <div className="flex flex-col gap-10 w-[62%] h-[calc(100vh-6rem)] overflow-auto">
+            <div className="flex flex-col-reverse lg:flex-row w-full p-4 sm:p-6 gap-6 xl:gap-8 xl:justify-between xl:items-start" >
+                <div className="flex flex-col gap-6 lg:gap-10 w-full xl:w-[62%] min-w-0 xl:h-[calc(100vh-6rem)] xl:overflow-auto">
+                    <div className="flex lg:hidden items-center justify-center bg-amber-400">
+                        <h2 className="text-center font-semibold text-lg text-[#135BEC]">Daily Logs</h2>
+                    </div>
                     <StepperContainer usersData={usersData}/>
                 </div>
 
-                <div className="flex flex-col gap-10 w-[35%] h-[calc(100vh-6rem)] overflow-auto">
+                <div className="flex flex-col gap-6 lg:gap-10 w-full xl:w-[35%] min-w-0 xl:h-[calc(100vh-6rem)] xl:overflow-auto">
                     <IdeaStepperContainer usersData={usersData}/>
                 </div>
             </div>

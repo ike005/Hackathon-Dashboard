@@ -1,10 +1,16 @@
 import Box from "@mui/material/Box";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import {useTheme} from "@mui/material/styles";
 import {BarChart} from "@mui/x-charts/BarChart";
 import {overallFeeling} from "../../utils/feelingLogic.ts";
 
 type Container2Props = { dailyLogData: any[] };
 
 const Container3 = ({dailyLogData}: Container2Props) => {
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const chartHeight = isMobile ? 240 : 300;
 
     const feelingData = overallFeeling(dailyLogData);
 
@@ -34,9 +40,10 @@ const Container3 = ({dailyLogData}: Container2Props) => {
 
     return (
         <>
-            <div className="w-[100%] bg-[#FFFFFF] rounded-3xl border-2 border-[#C9C6D9] flex justify-center items-center">
-                <Box sx={{width: '100%', height: 300}}>
+            <div className="w-full bg-[#FFFFFF] rounded-2xl md:rounded-3xl border-2 border-[#C9C6D9] flex justify-center items-center p-2 sm:p-4 overflow-hidden">
+                <Box sx={{width: '100%', height: chartHeight}}>
                     <BarChart
+                        height={chartHeight}
                         series={[
                             {data: uData, label: 'Super excited', id: 'pvId', stack: 'total'},
                             {data: pData, label: 'Good', id: 'uvId', stack: 'total'},

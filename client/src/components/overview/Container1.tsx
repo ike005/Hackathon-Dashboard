@@ -47,14 +47,14 @@ function Container1 ({usersData, dailyLogData}: Container1Props) {
             {FirstContainer.map((item, index) => (
                 <div
                     key={index}
-                    className="flex flex-col justify-between w-full h-full rounded-3xl gap-4 p-6 hover:shadow-lg"
+                    className="flex flex-col justify-between w-full min-h-[7rem] rounded-2xl md:rounded-3xl gap-3 md:gap-4 p-4 md:p-6 hover:shadow-lg"
                     style={{backgroundColor: item.bgColor}}
                 >
-                    <div className="flex items-center w-full gap-4">
-                        <div className="flex flex-col items-start w-full gap-2">
-                            <h3 className="text-[#000000] font-light text-md">{item.sectionName}</h3>
-                            <div className="flex flex-row justify-between w-[100%]">
-                                <h1 className="text-3xl font-bold text-[#000000]">{item.numberOfPeople}</h1>
+                    <div className="flex items-center w-full gap-3 md:gap-4">
+                        <div className="flex flex-col items-start w-full gap-1 md:gap-2">
+                            <h3 className="text-[#000000] font-light text-sm md:text-md">{item.sectionName}</h3>
+                            <div className="flex flex-row justify-between w-full items-center">
+                                <h1 className="text-2xl md:text-3xl font-bold text-[#000000]">{item.numberOfPeople}</h1>
                                 <item.icon fontSize="medium" className="text-[#9CA3AF]"/>
                             </div>
                         </div>

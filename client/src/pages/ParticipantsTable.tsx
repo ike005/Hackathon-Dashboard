@@ -32,22 +32,21 @@ const Participants = () => {
 
     return (
         <>
-            <div className="bg-[#FFFFFF] h-[100vh] w-full">
-                <div className="flex flex-row justify-between gap-2 h-[6rem] items-center border-b-2 border-[#C9C6D9]">
-                    {/*<h1 className="text-xl md:text-2xl font-bold text-[#000000] px-4 md:px-6 py-2 md:py-4 ">Participant Directory</h1>*/}
-                    <div className="px-6">
-                        <div className="flex flex-row bg-[#F0F3FF] border-2 border-[#CCC9DC] items-center px-3 py-2 rounded-lg w-[20rem]">
-                            <SearchIcon className="text-[#000000]"/>
-                            <input type="text" placeholder="Search participants..." className="w-full h-full px-4 py-2 text-[#000000] outline-none" value={searchParticipantValue} onChange={handleSearch}   />
+            <div className="bg-[#FFFFFF] min-h-[calc(100vh-3.5rem)] lg:min-h-screen w-full">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-3 sm:gap-2 min-h-[4.5rem] sm:h-[6rem] items-stretch sm:items-center border-b-2 border-[#C9C6D9] px-3 sm:px-4 md:px-6 py-3 sm:py-0">
+                    <div className="w-full sm:w-auto">
+                        <div className="flex flex-row bg-[#F0F3FF] border-2 border-[#CCC9DC] items-center px-3 py-2 rounded-lg w-full sm:w-[18rem] md:w-[20rem]">
+                            <SearchIcon className="text-[#000000] shrink-0"/>
+                            <input type="text" placeholder="Search participants..." className="w-full min-w-0 h-full px-2 sm:px-4 py-1 sm:py-2 text-sm sm:text-base text-[#000000] outline-none bg-transparent" value={searchParticipantValue} onChange={handleSearch}   />
                         </div>
                     </div>
                 </div>
 
-                <div className="px-4 md:px-6 py-2 md:py-4 flex flex-col gap-8 w-full h-[calc(100vh-6rem)] overflow-auto bg-[#F9F9FF]">
-                    <div className="flex flex-row justify-between items-center">
+                <div className="px-3 sm:px-4 md:px-6 py-3 md:py-4 flex flex-col gap-4 md:gap-8 w-full min-h-[calc(100vh-7.5rem)] lg:min-h-[calc(100vh-6rem)] overflow-auto bg-[#F9F9FF]">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                         <div>
-                            <h1 className="text-xl md:text-4xl font-bold text-[#000000]">Participants</h1>
-                            <p className="text-sm md:text-base font-medium text-[#000000]">
+                            <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-[#000000]">Participants</h1>
+                            <p className="text-xs sm:text-sm md:text-base font-medium text-[#000000]">
                                 {filteredUsersList.length > 0 ? `Showing ${filteredUsersList.length} of ${usersData.length} participants` : `Showing all ${usersData.length} participants`}
                             </p>
                         </div>

@@ -15,14 +15,16 @@ function App() {
       {/*    </Routes>*/}
       {/*</Router>*/}
       {/*  <Dashboard />*/}
-        <div className="flex flex-row">
+        <div className="flex flex-row min-h-screen w-full">
             <Navbar />
-            <Routes>
-                <Route path="/" element={<Dashboard />}/>
-                <Route path="/participant" element={<Details />}/>
-                <Route path="/participant/:user_id" element={<ProfilesPage/>} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
+            <main className="flex-1 min-w-0 pt-14 lg:pt-0 overflow-x-hidden">
+                <Routes>
+                    <Route path="/" element={<Dashboard />}/>
+                    <Route path="/participant" element={<Details />}/>
+                    <Route path="/participant/:user_id" element={<ProfilesPage/>} />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </main>
         </div>
     </>
   )
