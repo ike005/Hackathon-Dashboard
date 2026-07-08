@@ -1,91 +1,121 @@
 import os
-
+import threading
+import json
 from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 from dotenv import load_dotenv
-from bson import ObjectId
+from bson import json_util
 
 load_dotenv()
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = os.getenv('MONGO_DB_LINK')
+app.config["SECRET_KEY"] = os.getenv('SECRET_KEY', 'your-secret-key')
+
 mongo = PyMongo(app)
 db = mongo.db
 
 if db is None:
     raise Exception("MongoDB connection failed. Check your .env file.")
 
-cors = CORS(app, origins='*')
+CORS(app, origins='*')
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 
-# Used in getting all users profile information
+
+# ── Helper ───────────────────────────────────────────────────────────────────
+
+def serialize(doc):
+    doc["_id"] = str(doc["_id"])
+    return doc
+
+def to_json(doc):
+    """Converts BSON (MongoDB types) to a JSON-safe dict."""
+    return json.loads(json_util.dumps(doc))
+
+
+# ── Change Stream Watchers ───────────────────────────────────────────────────
+
+def watch_collection(collection_name, event_name):
+    """
+    Generic watcher — monitors a MongoDB collection for any insert/update
+    and emits the changed document to all connected React clients.
+    """
+    collection = db[collection_name]
+    pipeline = [
+        {'$match': {'operationType': {'$in': ['insert', 'update', 'replace']}}}
+    ]
+
+    print(f'[ChangeStream] Watching {collection_name}...')
+
+    # resume_after lets the stream pick up where it left off if it drops
+    while True:
+        try:
+            with collection.watch(pipeline, full_document='updateLookup') as stream:
+                for change in stream:
+                    doc = change.get('fullDocument')
+                    if doc:
+                        clean = to_json(doc)
+                        print(f'[ChangeStream] {collection_name} changed, emitting {event_name}')
+                        socketio.emit(event_name, clean)
+        except Exception as e:
+            # If the stream drops (network blip, replica set hiccup), restart it
+            print(f'[ChangeStream] {collection_name} stream error: {e}. Restarting...')
+
+
+def start_change_streams():
+    """Spin up one background thread per collection you want to watch."""
+    collections = [
+        ('users_new',     'user_updated'),
+        ('daily_log',     'daily_log_updated'),
+        ('brainstorming', 'brainstorming_updated'),
+    ]
+    for collection_name, event_name in collections:
+        t = threading.Thread(
+            target=watch_collection,
+            args=(collection_name, event_name),
+            daemon=True  # dies automatically when the Flask process exits
+        )
+        t.start()
+
+
+# ── WebSocket lifecycle ──────────────────────────────────────────────────────
+
+@socketio.on('connect')
+def handle_connect():
+    print(f'Client connected: {request.sid}')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print(f'Client disconnected: {request.sid}')
+
+
+# ── REST endpoints (unchanged, still useful for initial page load) ────────────
+
 @app.route("/api/users", methods=['GET'])
 def get_users():
-    data = list(db.users_new.find())
-
-    for users in data:
-        users["_id"] = str(users["_id"])
-
+    data = [serialize(u) for u in db.users_new.find()]
     return jsonify(data), 200
 
-# Used in getting all users daily log
 @app.route("/api/users/daily_log", methods=['GET'])
 def get_daily_log():
-    data = list(db.daily_log.find())
-
-    for daily_log in data:
-        daily_log["_id"] = str(daily_log["_id"])
-
+    data = [serialize(d) for d in db.daily_log.find()]
     return jsonify(data), 200
 
-# Used in getting all users brainstorming ideas
 @app.route("/api/users/brainstorming_ideas", methods=['GET'])
 def get_brainstorming_ideas():
-    data = list(db.brainstorming.find())
-
-    brainstorming_ideas = []
-    for brainstorming_ideas in data:
-        brainstorming_ideas["_id"] = str(brainstorming_ideas["_id"])
-
-    return jsonify(brainstorming_ideas), 200
-
-# This returns all a particular users information
-# @app.route("/api/users/<user_id>", methods=['GET'])
-# def get_user_by_id(user_id):
-#     user_profile_info = db.users_new.find_one({"user_id": user_id})
-#     user_daily_log = db.daily_log.find({"user_id": user_id})
-#     user_brainstorming_ideas = db.brainstorming.find({"user_id": user_id})
-#
-#     if not user_profile_info:
-#         return jsonify({"error": "User not found"}), 404
-#     if not user_daily_log:
-#         return jsonify({"error": "User not found"}), 404
-#     if not user_brainstorming_ideas:
-#         return jsonify({"error": "User not found"}), 404
-#
-#     user_profile_info["_id"] = str(user_profile_info["_id"])
-#     user_daily_log["_id"] = str(user_daily_log["_id"])
-#     user_brainstorming_ideas["_id"] = str(user_brainstorming_ideas["_id"])
-#
-#     return jsonify({
-#         "profile_info": user_profile_info,
-#         "daily_log": user_daily_log,
-#         "brainstorming_ideas": user_brainstorming_ideas
-#     }), 200
+    data = [serialize(b) for b in db.brainstorming.find()]
+    return jsonify(data), 200
 
 @app.route("/api/users/<user_id>", methods=["GET"])
 def get_user_by_id(user_id):
-
     user_profile_info = db.users_new.find_one({"user_id": user_id})
-
     user_daily_log = list(db.daily_log.find({"user_id": int(user_id)}))
-
     user_brainstorming_ideas = list(db.brainstorming.find({"user_id": int(user_id)}))
 
     if not user_profile_info:
         return jsonify({"error": "User not found"}), 404
-
-    user_profile_info["_id"] = str(user_profile_info["_id"])
 
     for log in user_daily_log:
         log["_id"] = str(log["_id"])
@@ -94,12 +124,11 @@ def get_user_by_id(user_id):
         idea["_id"] = str(idea["_id"])
 
     return jsonify({
-        "profile_info": user_profile_info,
+        "profile_info": serialize(user_profile_info),
         "daily_log": user_daily_log,
         "brainstorming_ideas": user_brainstorming_ideas
     }), 200
 
-# This is used to update a users profile
 @app.route("/api/users/<user_id>", methods=['PATCH'])
 def update_user_profile_info_by_id(user_id):
     new_data = request.json
@@ -112,21 +141,14 @@ def update_user_profile_info_by_id(user_id):
     if result.matched_count == 0:
         return jsonify({"error": "User not found"}), 404
 
+    # Change stream will catch this automatically, but emitting directly
+    # here too means React updates even faster (no stream delay)
+    updated_user = to_json(db.users_new.find_one({"user_id": user_id}))
+    socketio.emit('user_updated', updated_user)
+
     return jsonify({"message": "User profile info updated successfully"}), 200
-
-# @app.route("/Users/<user_name>/<date>", methods=['DELETE'])
-# def delete_user_details_by_date(user_name, date):
-#     db.users_new.update_one({"user_name": user_name},{"$unset": {date: ""}})
-#     return jsonify({"message": "date delete successfully"}), 200
-
-
-
-
-# get information for a single user
-#
-# get information on all users for the dashboard
-
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    start_change_streams()  # ← start watchers before serving
+    socketio.run(app, debug=True, port=8080)

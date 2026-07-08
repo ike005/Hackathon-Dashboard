@@ -21,12 +21,11 @@ const Container1 = ({usersData}: Container1Props) => {
     return (
         <>
             <div
-                className="flex flex-col w-[100%] rounded-md gap-4 border-2 border-[#C9C6D9]">
+                className="flex flex-col w-full rounded-md gap-4 border-2 border-[#C9C6D9] overflow-hidden">
                 <div className="flex flex-col md:flex-row md:justify-between gap-2">
-                    {/*md:max-w-1/3*/}
-                    <div className="flex items-center w-full gap-2">
-                        <TableContainer component={Paper}>
-                            <Table sx={{maxWidth: '100%'}} aria-label="customized table"  className="bg-[#FFFFFF]">
+                    <div className="flex items-center w-full gap-2 overflow-x-auto">
+                        <TableContainer component={Paper} sx={{maxWidth: '100%', overflowX: 'auto'}}>
+                            <Table sx={{minWidth: 640, maxWidth: '100%'}} aria-label="customized table" className="bg-[#FFFFFF]">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell style={{backgroundColor: '#F0F3FF', color: '#000000', textAlign: 'center', fontWeight: 'bold'}}>Name</StyledTableCell>
@@ -44,9 +43,9 @@ const Container1 = ({usersData}: Container1Props) => {
                                             </StyledTableCell>
 
                                             <StyledTableCell align="left" style={{ color: "#A1A6AD", textAlign: "center" }}>
-                                                <a href={row.githubLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 no-underline text-[#135BEC] hover:text-[#3726CD]">
-                                                    <Link2 size={16} />
-                                                    <span>{row.githubLink}</span>
+                                                <a href={row.githubLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 no-underline text-[#135BEC] hover:text-[#3726CD] max-w-[12rem] sm:max-w-none truncate">
+                                                    <Link2 size={16} className="shrink-0" />
+                                                    <span className="truncate">{row.githubLink}</span>
                                                 </a>
                                             </StyledTableCell>
 

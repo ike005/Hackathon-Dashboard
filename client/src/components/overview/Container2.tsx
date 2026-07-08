@@ -1,4 +1,6 @@
 import Box from "@mui/material/Box";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import {useTheme} from "@mui/material/styles";
 import {LineChart} from "@mui/x-charts/LineChart";
 import type {secondContainer} from "../../types/overviewTypes.ts";
 
@@ -8,6 +10,11 @@ type Container2Props = { dailyLogData: any[] };
 
 
 function Container2 (dailyLogData: Container2Props) {
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
+    const chartHeight = isMobile ? 260 : isTablet ? 360 : 500;
 
     const daysData = trackActiveUsers(dailyLogData);
 
@@ -29,10 +36,10 @@ function Container2 (dailyLogData: Container2Props) {
     // @ts-ignore
     return(
         <>
-            <div className="w-[100%] h-[100%] flex flex-col justify-center items-center bg-[#FFFFFF] rounded-3xl border-2 border-[#C9C6D9]">
+            <div className="w-full h-full flex flex-col justify-center items-center bg-[#FFFFFF] rounded-2xl md:rounded-3xl border-2 border-[#C9C6D9] p-2 sm:p-4 overflow-hidden">
                 <Box sx={{ width: '100%', height: '100%', minHeight: 0 }}>
                     <LineChart
-                        height={500}
+                        height={chartHeight}
 
                         series={[
                             { data: SecondContainer[0].lineChartData.dailyCheckInData, label: 'Check Ins', yAxisId: 'leftAxisId' },
