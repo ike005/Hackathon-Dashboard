@@ -1,28 +1,47 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { socket } from "./socket";
 
 export function useAllDataPoints() {
-    const baseUrl = import.meta.env.VITE_API_URL;
     const { user_id } = useParams();
-    const [usersData, setUsersData] = useState<any[]>([]);
+    const [usersData, setUsersData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await fetch(`${baseUrl}/api/users/${user_id}`);
-                if (!response.ok) throw new Error("Failed to fetch database");
+        if (!user_id) return;
 
-                const jsonData = await response.json();
-                setUsersData(jsonData);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
+        const handleUserInfo = (data: any) => {
+            console.log("Received user data:", data);
+            setUsersData(data);
+            setLoading(false);
+        };
+
+        const handleUserUpdate = (updatedUser: any) => {
+            if (updatedUser.user_id == user_id) {
+                setUsersData((prev: any) => {
+                    if (!prev) return prev;
+
+                    return {
+                        ...prev,
+                        profile_info: updatedUser,
+                    };
+                });
             }
-        }
-        setInterval(fetchData, 500)
-    }, []);
+        };
 
-    return { usersData, loading};
+        socket.on("user_info", handleUserInfo);
+        socket.on("user_updated", handleUserUpdate);
+
+        socket.emit("get_a_unique_user_data", user_id);
+
+        return () => {
+            socket.off("user_info", handleUserInfo);
+            socket.off("user_updated", handleUserUpdate);
+        };
+    }, [user_id]);
+
+    return {
+        usersData,
+        loading,
+    };
 }

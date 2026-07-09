@@ -1,26 +1,43 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { socket } from "./socket.ts";
 
 export function useUsers() {
-    const baseUrl = import.meta.env.VITE_API_URL;
     const [usersData, setUsersData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await fetch(`${baseUrl}/api/users`);
-                if (!response.ok) throw new Error("Failed to fetch database");
+        const handleUsers = (users: any[]) => {
+            console.log("Initial users:", users);
+            setUsersData(users);
+            setLoading(false);
+        };
 
-                const jsonData = await response.json();
-                setUsersData(jsonData);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        }
-        setInterval(fetchData, 500)
+        const handleUserUpdate = (updatedUser: any) => {
+            setUsersData((prev) => {
+                const index = prev.findIndex(
+                    (u) => u.user_id === updatedUser.user_id
+                );
+
+                if (index === -1) {
+                    return [...prev, updatedUser];
+                }
+
+                const updated = [...prev];
+                updated[index] = updatedUser;
+                return updated;
+            });
+        };
+
+        socket.on("users", handleUsers);
+        socket.on("user_updated", handleUserUpdate);
+
+        socket.emit("get_all_users");
+
+        return () => {
+            socket.off("users", handleUsers);
+            socket.off("user_updated", handleUserUpdate);
+        };
     }, []);
 
-    return { usersData, loading};
+    return { usersData, loading };
 }
