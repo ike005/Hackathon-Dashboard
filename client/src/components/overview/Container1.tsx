@@ -1,19 +1,15 @@
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
 import AddReactionIcon from '@mui/icons-material/AddReaction';
-import type {Container1Props} from "../../types/overviewTypes.ts";
-
-import {averageUserFeeling, feelingPercentage} from "../../utils/feelingLogic.ts";
+import {averageUserFeeling} from "../../utils/feelingLogic.ts";
 import gettingActiveUsers from "../../utils/gettingActiveUsers.ts";
 import {trackActiveUsers} from "../../utils/analytics.ts";
-
-
+import type {Container1Props} from "../../types/overviewTypes.ts";
 
 function Container1 ({usersData, dailyLogData}: Container1Props) {
 
     const {totalParticipants} = gettingActiveUsers(usersData);
     const currentActiveUsers = trackActiveUsers({ dailyLogData });
     const {averageFeeling } = averageUserFeeling(dailyLogData ?? []);
-    feelingPercentage(dailyLogData ?? []);
 
     const FirstContainer = [
         {

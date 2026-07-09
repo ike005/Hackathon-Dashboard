@@ -9,12 +9,6 @@ import NotFound from "./pages/NotFound.tsx";
 function App() {
   return (
     <>
-      {/*<Router>*/}
-      {/*    <Routes>*/}
-      {/*        <Route path="/" element={<Dashboard />} />*/}
-      {/*    </Routes>*/}
-      {/*</Router>*/}
-      {/*  <Dashboard />*/}
         <div className="flex flex-row min-h-screen w-full">
             <Navbar />
             <main className="flex-1 min-w-0 pt-14 lg:pt-0 overflow-x-hidden">

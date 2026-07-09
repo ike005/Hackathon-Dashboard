@@ -1,7 +1,7 @@
 import os
 import threading
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
@@ -93,29 +93,31 @@ def handle_disconnect():
 
 # ── REST endpoints (unchanged, still useful for initial page load) ────────────
 
-@app.route("/api/users", methods=['GET'])
+@socketio.on("get_all_users")
 def get_users():
     data = [serialize(u) for u in db.users_new.find()]
-    return jsonify(data), 200
+    print(f"Sending {len(data)} users")
+    emit("users", data)
 
-@app.route("/api/users/daily_log", methods=['GET'])
+@socketio.on("get_all_users_daily_log")
 def get_daily_log():
     data = [serialize(d) for d in db.daily_log.find()]
-    return jsonify(data), 200
+    emit("daily_log", data)
 
-@app.route("/api/users/brainstorming_ideas", methods=['GET'])
+@socketio.on("get_all_users_brainstorming_ideas")
 def get_brainstorming_ideas():
     data = [serialize(b) for b in db.brainstorming.find()]
-    return jsonify(data), 200
+    emit("brainstorming_ideas", data)
 
-@app.route("/api/users/<user_id>", methods=["GET"])
+@socketio.on("get_a_unique_user_data")
 def get_user_by_id(user_id):
     user_profile_info = db.users_new.find_one({"user_id": user_id})
     user_daily_log = list(db.daily_log.find({"user_id": int(user_id)}))
     user_brainstorming_ideas = list(db.brainstorming.find({"user_id": int(user_id)}))
 
     if not user_profile_info:
-        return jsonify({"error": "User not found"}), 404
+        emit({"error": "User not found"})
+        return
 
     for log in user_daily_log:
         log["_id"] = str(log["_id"])
@@ -123,31 +125,11 @@ def get_user_by_id(user_id):
     for idea in user_brainstorming_ideas:
         idea["_id"] = str(idea["_id"])
 
-    return jsonify({
+    emit("user_info", {
         "profile_info": serialize(user_profile_info),
         "daily_log": user_daily_log,
         "brainstorming_ideas": user_brainstorming_ideas
-    }), 200
-
-@app.route("/api/users/<user_id>", methods=['PATCH'])
-def update_user_profile_info_by_id(user_id):
-    new_data = request.json
-
-    if not new_data:
-        return jsonify({"error": "No update data provided"}), 400
-
-    result = db.users_new.update_one({"user_id": user_id}, {"$set": new_data})
-
-    if result.matched_count == 0:
-        return jsonify({"error": "User not found"}), 404
-
-    # Change stream will catch this automatically, but emitting directly
-    # here too means React updates even faster (no stream delay)
-    updated_user = to_json(db.users_new.find_one({"user_id": user_id}))
-    socketio.emit('user_updated', updated_user)
-
-    return jsonify({"message": "User profile info updated successfully"}), 200
-
+    })
 
 if __name__ == "__main__":
     start_change_streams()  # ← start watchers before serving

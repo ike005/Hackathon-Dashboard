@@ -2,11 +2,10 @@ import Stepper from '@mui/joy/Stepper';
 import Step, { stepClasses } from '@mui/joy/Step';
 import { stepIndicatorClasses } from '@mui/joy/StepIndicator';
 import Typography, { typographyClasses } from '@mui/joy/Typography';
+import type {Container1Props} from "../../types/participantsTypes.tsx";
 
 
-type StepperProps = { usersData: any };
-
-export default function StepperContainer({usersData}: StepperProps) {
+export default function StepperContainer({usersData}: Container1Props) {
 
     const allUserDailyLogData = [...(usersData?.daily_log || [])].sort(
         (a, b) =>

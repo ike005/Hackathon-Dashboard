@@ -2,10 +2,8 @@ import {useTheme} from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import {rainbowSurgePalette} from "@mui/x-charts/colorPalettes";
 import {pieArcClasses, PieChart, type PieChartProps, pieClasses} from "@mui/x-charts/PieChart";
-
 import {feelingPercentage} from "../../utils/feelingLogic.ts";
-
-type Container2Props = { dailyLogData: any[] };
+import type {Container2Props} from "../../types/overviewTypes.ts";
 
 function Container4 ({dailyLogData}: Container2Props) {
     const {percentageSuperExcited, percentageGood, percentageOkay, percentageStressed} = feelingPercentage(dailyLogData);

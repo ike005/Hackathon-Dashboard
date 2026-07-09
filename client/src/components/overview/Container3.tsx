@@ -3,8 +3,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import {useTheme} from "@mui/material/styles";
 import {BarChart} from "@mui/x-charts/BarChart";
 import {overallFeeling} from "../../utils/feelingLogic.ts";
-
-type Container2Props = { dailyLogData: any[] };
+import type {Container2Props} from "../../types/overviewTypes.ts";
 
 const Container3 = ({dailyLogData}: Container2Props) => {
 
@@ -13,7 +12,6 @@ const Container3 = ({dailyLogData}: Container2Props) => {
     const chartHeight = isMobile ? 240 : 300;
 
     const feelingData = overallFeeling(dailyLogData);
-
     const sortedFeeling = [...feelingData].sort(
         (a, b) =>
             new Date(a.Key).getTime() -
@@ -62,7 +60,6 @@ const Container3 = ({dailyLogData}: Container2Props) => {
             </div>
         </>
     );
-
 }
 
 export default Container3;

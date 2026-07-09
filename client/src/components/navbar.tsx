@@ -2,14 +2,12 @@ import {NavLink} from "react-router-dom";
 import {useState} from "react";
 import {Menu, X} from "lucide-react";
 
-
 type NavLinksProps = {
     onNavigate?: () => void;
 };
 
 const NavLinks = ({onNavigate}: NavLinksProps) => {
     const isLoggedIn = true;
-
     const linkClass = ({isActive}: { isActive: boolean }) =>
         `block px-4 lg:px-6 py-2 cursor-pointer text-sm font-semibold text-[#000000] rounded-lg transition-colors
         ${isActive ? 'bg-[#F0F3FF] text-[#135BEC]' : 'hover:bg-[#F0F3FF]/60'}`;
@@ -31,7 +29,6 @@ const NavLinks = ({onNavigate}: NavLinksProps) => {
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-
     const closeMenu = () => setIsOpen(false);
 
     return (
