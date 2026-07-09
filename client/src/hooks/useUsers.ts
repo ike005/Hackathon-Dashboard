@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 
 export function useUsers() {
     const baseUrl = import.meta.env.VITE_API_URL;
-
     const [usersData, setUsersData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -20,10 +19,8 @@ export function useUsers() {
                 setLoading(false);
             }
         }
-
         setInterval(fetchData, 500)
     }, []);
 
-
-    return { usersData, loading} ;
+    return { usersData, loading};
 }

@@ -7,11 +7,9 @@ import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import StyledTableCell from "@mui/material/TableCell";
 import StyledTableRow from "@mui/material/TableRow";
-
 import {Link2} from "lucide-react";
-
 import usersInfo from "../../utils/usersInfo";
-import type {Container1Props} from "../../types/overviewTypes.ts";
+import type {Container1Props} from "../../types/participantsTypes.tsx";
 
 const Container1 = ({usersData}: Container1Props) => {
 

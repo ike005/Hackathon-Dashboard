@@ -2,10 +2,10 @@ import Stepper from '@mui/joy/Stepper';
 import { stepClasses } from '@mui/joy/Step';
 import { stepIndicatorClasses } from '@mui/joy/StepIndicator';
 import Typography, { typographyClasses } from '@mui/joy/Typography';
+import type {Container1Props} from "../../types/participantsTypes.tsx";
 
-type StepperProps = { usersData: any };
 
-export default function IdeaStepperContainer({usersData}: StepperProps) {
+export default function IdeaStepperContainer({usersData}: Container1Props) {
 
     const brainstormingData = [...(usersData?.brainstorming_ideas || [])].sort(
         (a, b) =>

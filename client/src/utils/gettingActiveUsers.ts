@@ -13,7 +13,6 @@ function gettingActiveUsers(data: any) {
         }
         return active;
     }
-    // console.log(data);
     return {totalActiveParticipants, currentDate, totalParticipants};
 }
 

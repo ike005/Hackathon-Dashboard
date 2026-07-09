@@ -12,20 +12,6 @@ export interface secondContainer {
     };
 }
 
-export interface Container7Props {
-    data?: any[]
-}
-
-export interface Container4SideLabelInfo {
-    label: string;
-    value: number;
-}
-
-export interface ProfileInfo {
-    name?: string;
-    github_link?: string;
-    user_id?: string;
-    username?: string;
-    email?: string;
-    gender?: string;
+export interface Container2Props {
+    dailyLogData: any[]
 }

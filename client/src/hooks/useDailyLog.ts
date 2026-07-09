@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 
 export function useDailyLog() {
     const baseUrl = import.meta.env.VITE_API_URL;
-
     const [usersDailyLogData, setUsersDailyLogData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -20,9 +19,8 @@ export function useDailyLog() {
                 setLoading(false);
             }
         }
-
         setInterval(fetchData, 500)
     }, []);
 
-    return { usersDailyLogData, loading} ;
+    return { usersDailyLogData, loading};
 }

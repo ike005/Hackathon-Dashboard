@@ -5,9 +5,7 @@ import {LineChart} from "@mui/x-charts/LineChart";
 import type {secondContainer} from "../../types/overviewTypes.ts";
 
 import {trackActiveUsers} from "../../utils/analytics.ts";
-
-type Container2Props = { dailyLogData: any[] };
-
+import type {Container2Props} from "../../types/overviewTypes.ts"
 
 function Container2 (dailyLogData: Container2Props) {
 
@@ -17,11 +15,7 @@ function Container2 (dailyLogData: Container2Props) {
     const chartHeight = isMobile ? 260 : isTablet ? 360 : 500;
 
     const daysData = trackActiveUsers(dailyLogData);
-
     const dateSort = daysData.dictArray.sort((a: any, b: any) => new Date(a.Key).getTime() - new Date(b.Key).getTime());
-
-
-
 
     const SecondContainer: secondContainer[] = [
         {

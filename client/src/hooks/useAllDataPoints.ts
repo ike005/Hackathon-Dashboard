@@ -3,9 +3,7 @@ import { useParams } from "react-router-dom";
 
 export function useAllDataPoints() {
     const baseUrl = import.meta.env.VITE_API_URL;
-
     const { user_id } = useParams();
-
     const [usersData, setUsersData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -23,10 +21,8 @@ export function useAllDataPoints() {
                 setLoading(false);
             }
         }
-
         setInterval(fetchData, 500)
     }, []);
 
-
-    return { usersData, loading} ;
+    return { usersData, loading};
 }

@@ -1,5 +1,3 @@
-// import {Container5, Container6, Container7} from '../components/Containers.tsx';
-// import Navbar from "../components/navbar.tsx";
 import {useUsers} from "../hooks/useUsers.ts";
 import {useDailyLog} from "../hooks/useDailyLog.ts";
 
@@ -10,11 +8,8 @@ import Container4 from "../components/overview/Container4.tsx"
 
 
 const Dashboard = () => {
-
     const {usersData} = useUsers();
     const { usersDailyLogData: dailyLogData } = useDailyLog();
-
-
 
     return(
         <>
@@ -43,8 +38,6 @@ const Dashboard = () => {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </>
