@@ -11,7 +11,7 @@ export default function IdeaStepperContainer({usersData}: Container1Props) {
         (a, b) =>
             new Date(b.log_date).getTime() -
             new Date(a.log_date).getTime()
-    )
+    );
 
     return (
         <Stepper
@@ -50,12 +50,75 @@ export default function IdeaStepperContainer({usersData}: Container1Props) {
 
                     <div className="bg-[#F0F3FF] rounded-lg p-4 flex flex-col gap-2">
                         <h2 className="font-semibold text-lg text-[#135BEC]">Brainstorming Ideas</h2>
+
                         <ul className="list-disc pl-5">
-                            {item.user_interests?.map((idea: any, index: number) => (
-                                <li key={index} className="italic text-sm font-light">
-                                    {idea}
-                                </li>
-                            ))}
+                            <h2 className="font-semibold text-md text-[#135BEC]">User Interests</h2>
+                            <ul className="list-disc pl-5">
+                                {item.user_interests?.map((idea: any, index: number) => (
+                                    <li key={index} className="italic text-sm font-light">
+                                        {idea}
+                                    </li>
+                                ))}
+                            </ul>
+
+                            {item.user_possible_project_impact ?
+                                <div>
+                                    <h2 className="font-semibold text-md text-[#135BEC]">Possible Impact to Fields</h2>
+                                    <ul className="list-disc pl-5">
+                                        {item.user_possible_project_impact?.map((idea: any, index: number) => (
+                                            <li key={index} className="italic text-sm font-light">
+                                                {idea}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                :
+                                null
+                            }
+
+                            {item.user_reason_for_interests ?
+                                <div>
+                                    <h2 className="font-semibold text-md text-[#135BEC]">User For This Interest</h2>
+                                    <ul className="list-disc pl-5">
+                                        <h3 className="italic text-sm font-light">
+                                            {item.user_reason_for_interests}
+                                        </h3>
+                                    </ul>
+                                </div>
+                                :
+                                null
+                            }
+
+                            {item.user_techstack_interests ?
+                                <div>
+                                    <h2 className="font-semibold text-md text-[#135BEC]">User Tech Stack Interest</h2>
+                                    <ul className="list-disc pl-5">
+                                        {item.user_techstack_interests?.map((idea: any, index: number) => (
+                                            <li key={index} className="italic text-sm font-light">
+                                                {idea}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                :
+                                null
+                            }
+
+                            {item.user_tools_utilized ?
+                                <div>
+                                    <h2 className="font-semibold text-md text-[#135BEC]">Possible Tools or Resources</h2>
+                                    <ul className="list-disc pl-5">
+                                        {item.user_tools_utilized?.map((idea: any, index: number) => (
+                                            <li key={index} className="italic text-sm font-light">
+                                                {idea}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                :
+                                null
+                            }
+
                         </ul>
                     </div>
                 </div>

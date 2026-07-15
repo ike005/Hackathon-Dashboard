@@ -29,7 +29,7 @@ const Dashboard = () => {
                             <Container2 dailyLogData={dailyLogData} />
                         </div>
 
-                        <div className="w-full h-fit flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-10">
+                        <div className="w-full h-fit flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-10 items-center">
                             <div className="w-full lg:w-1/2 min-w-0">
                                 <Container3 dailyLogData={dailyLogData} />
                             </div>

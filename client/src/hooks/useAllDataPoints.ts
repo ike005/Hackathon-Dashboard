@@ -40,6 +40,8 @@ export function useAllDataPoints() {
         };
     }, [user_id]);
 
+    // console.log("usersData:", usersData);
+
     return {
         usersData,
         loading,
