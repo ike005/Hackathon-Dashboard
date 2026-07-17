@@ -1,5 +1,6 @@
 import Dashboard from './pages/Dashboard.tsx';
 import Details from './pages/ParticipantsTable.tsx';
+import Download from './pages/Downloads.tsx';
 import {Routes, Route} from "react-router-dom";
 import Navbar from "./components/navbar.tsx";
 import ProfilesPage from "./pages/ProfilesPage.tsx";
@@ -16,6 +17,7 @@ function App() {
                     <Route path="/" element={<Dashboard />}/>
                     <Route path="/participant" element={<Details />}/>
                     <Route path="/participant/:user_id" element={<ProfilesPage/>} />
+                    <Route path="/download" element={<Download />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </main>

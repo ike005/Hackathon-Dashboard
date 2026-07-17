@@ -1,9 +1,11 @@
 import Container1 from "../components/participantstable/Container1.tsx";
 import {useUsers} from "../hooks/useUsers.ts";
 import {useState} from "react";
+// import {ComponentToPrint} from "./ComponentToPrint.tsx";
 
 
 import SearchIcon from '@mui/icons-material/Search';
+// import {useReactToPrint} from "react-to-print";
 
 const Participants = () => {
     const {usersData} = useUsers();
@@ -28,6 +30,13 @@ const Participants = () => {
         setFilteredUsersList(filteredUsersData);
     }
 
+    // @ts-ignore
+    // const componentRef = useRef();
+    // // @ts-ignore
+    // const handlePrint = useReactToPrint({
+    //     content: () => componentRef.current,
+    // });
+
     return (
         <>
             <div className="bg-[#FFFFFF] min-h-[calc(100vh-3.5rem)] lg:min-h-screen w-full">
@@ -38,6 +47,16 @@ const Participants = () => {
                             <input type="text" placeholder="Search participants..." className="w-full min-w-0 h-full px-2 sm:px-4 py-1 sm:py-2 text-sm sm:text-base text-[#000000] outline-none bg-transparent" value={searchParticipantValue} onChange={handleSearch}   />
                         </div>
                     </div>
+
+                    {/*<div>*/}
+                    {/*    <ComponentToPrint ref={componentRef} />*/}
+                    {/*</div>*/}
+
+                    {/*<div className="w-full sm:w-auto flex flex-row gap-2 sm:gap-4 items-center justify-end">*/}
+                    {/*    <button onClick={handlePrint} className="px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-[#000000] bg-[#F0F3FF] rounded-lg hover:bg-[#F0F3FF]/80 transition-colors">*/}
+                    {/*        <a href="/download" className="text-[#135BEC] hover:text-[#3726CD]">Download Report</a>*/}
+                    {/*    </button>*/}
+                    {/*</div>*/}
                 </div>
 
                 <div className="px-3 sm:px-4 md:px-6 py-3 md:py-4 flex flex-col gap-4 md:gap-8 w-full min-h-[calc(100vh-7.5rem)] lg:min-h-[calc(100vh-6rem)] overflow-auto bg-[#F9F9FF]">
