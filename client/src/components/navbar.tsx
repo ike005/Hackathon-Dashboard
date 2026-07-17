@@ -17,7 +17,6 @@ const NavLinks = ({onNavigate}: NavLinksProps) => {
             <NavLink to="/" className={linkClass} onClick={onNavigate}>Dashboard</NavLink>
             <NavLink to="/participant" className={linkClass} onClick={onNavigate}>Participants</NavLink>
             <NavLink to="/download" className={linkClass} onClick={onNavigate}>Downloads</NavLink>
-            <NavLink to="/test" className={linkClass} onClick={onNavigate}>test</NavLink>
 
             {isLoggedIn ?
                 <NavLink to="#" className="block px-4 lg:px-6 py-2 text-[#000000] cursor-pointer rounded-lg hover:bg-[#F0F3FF]/60" onClick={onNavigate}>Logout</NavLink>
