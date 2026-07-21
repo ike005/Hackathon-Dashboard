@@ -104,8 +104,8 @@ def get_daily_log():
     data = [serialize(d) for d in db.daily_log.find()]
     emit("daily_log", data)
 
-@socketio.on("get_all_users_brainstorming_ideas")
-def get_brainstorming_ideas():
+@socketio.on("get_all_users_info_with_brainstorming_ideas")
+def get_users_info_and_brainstorming_ideas():
     data = [serialize(b) for b in db.brainstorming.find()]
     emit("brainstorming_ideas", data)
 

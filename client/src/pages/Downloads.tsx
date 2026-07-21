@@ -2,6 +2,8 @@ import {useRef, useState} from 'react';
 import generatePDF from 'react-to-pdf';
 import { RiArrowDropRightLine, RiArrowDropDownLine } from "react-icons/ri";
 
+import AllUsersReport from "./DownloadPdfFile/AllUsersReport.tsx";
+
 const Downloads = () => {
     const targetForAllReportRef = useRef(null);
     const targetForIndividualReportRef = useRef(null);
@@ -25,30 +27,9 @@ const Downloads = () => {
             {/*    <p className="mt-4 text-sm sm:text-base text-[#000000] font-medium">Page not found</p>*/}
             {/*</div>*/}
 
-            <div className="font-bold flex flex-row h-full w-full gap-4">
+            <div className="font-bold flex flex-col h-full w-full gap-4">
 
-                <div className="h-[100%] w-[50%] border-r-2 border-[#C9C6D9]">
-                    {/*<div className="gap-2 flex flex-row items-center">*/}
-                    {/*    <label className="text-[#145BEC] text-xl" htmlFor="report">Download All Users Report:</label>*/}
-                    {/*    <button onClick={() => handleDownload(targetForAllReportRef, "All_Report")}  className="px-3 py-2 text-sm sm:text-base font-semibold text-[#000000] bg-[#F0F3FF] rounded-lg hover:bg-[#F0F3FF]/80 transition-colors cursor-pointer">*/}
-                    {/*        <span className="text-[#135BEC] hover:text-[#3726CD]">Download Report</span>*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
-
-                    {/*<div>*/}
-                    {/*    <div className="flex flex-row items-center gap-4">*/}
-                    {/*        <label className="text-[#145BEC] text-2xl" htmlFor="report">Download Report:</label>*/}
-                    {/*        <select name="report" id="report" className="border-none text-md" >*/}
-                    {/*            <option value="">Select options</option>*/}
-                    {/*            <option value="apple">Compiled Report</option>*/}
-                    {/*            <option value="banana">Banana</option>*/}
-                    {/*            <option value="orange">Orange</option>*/}
-                    {/*        </select>*/}
-                    {/*    </div>*/}
-                    {/*    <button onClick={() => handleDownload(targetForIndividualReportRef, "User_Report")} className="bg-[#145BEC] text-white px-4 py-2 rounded-lg hover:bg-[#145BEC]/80 transition-colors">*/}
-                    {/*        Download*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
+                <div className="h-[100%] border-r-2 border-[#C9C6D9]">
 
                     <div className="space-y-4">
                         <div
@@ -106,12 +87,10 @@ const Downloads = () => {
                     </div>
                 </div>
 
-                <div className="h-[100%] w-[50%]">
+                <div className="h-[100%]">
 
                     {showReport && (
-                        <div ref={targetForAllReportRef} className="text-2xl">
-                            Hello world all
-                        </div>
+                        <AllUsersReport ref={targetForAllReportRef} />
                     )}
 
                     {!showReport && (
