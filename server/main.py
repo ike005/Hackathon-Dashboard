@@ -1,8 +1,4 @@
-import eventlet
-eventlet.monkey_patch()
-
 import os
-import sys
 import threading
 import json
 from flask import Flask, request
@@ -25,9 +21,11 @@ if db is None:
     raise Exception("MongoDB connection failed. Check your .env file.")
 
 CORS(app, origins='*')
+# socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
+    cors_allowed_credentials=True,  # ← ADD THIS LINE
     async_mode='eventlet',
     ping_timeout=60,
     ping_interval=25,
@@ -98,14 +96,7 @@ def watch_collection(collection_name, event_name):
             print(f'[ChangeStream] {collection_name} stream error: {e}. Restarting...')
 
 
-_change_streams_started = False
-
 def start_change_streams():
-    global _change_streams_started
-    if _change_streams_started:
-        return
-    _change_streams_started = True
-
     """Spin up one background thread per collection you want to watch."""
     collections = [
         ('users_new',     'user_updated'),
@@ -166,15 +157,6 @@ def get_all_users_report_data():
     print(f"Sending report data for {len(report_data)} users")
     emit("all_users_report_data", report_data)
 
-
-@app.route("/health")
-def health():
-    return {"status": "ok"}, 200
-
-
-# Start change streams under gunicorn (production) or python main.py (local)
-if "gunicorn" in sys.modules or __name__ == "__main__":
-    start_change_streams()
-
 if __name__ == "__main__":
+    start_change_streams()  # ← start watchers before serving
     socketio.run(app, debug=True, port=8080)
