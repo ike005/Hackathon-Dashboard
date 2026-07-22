@@ -41,5 +41,3 @@ export function useBrainstormingIdeas() {
 
     return { usersBrainstormingIdeas, loading };
 }
-
-useBrainstormingIdeas()

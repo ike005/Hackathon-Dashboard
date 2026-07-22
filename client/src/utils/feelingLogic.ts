@@ -130,5 +130,51 @@ function overallFeeling(data: any[]) {
     return overallData;
 }
 
-export {averageUserFeeling, feelingPercentage, overallFeeling};
+function overallDominantFeeling(data: any[]) {
+    const overallData = overallFeeling(data);
+
+    const totals = {
+        percentageSuperExcited: 0,
+        percentageGood: 0,
+        percentageOkay: 0,
+        percentageStressed: 0
+    };
+
+    for (const item of overallData) {
+        totals.percentageSuperExcited += Number(item.Value.percentageSuperExcited);
+        totals.percentageGood += Number(item.Value.percentageGood);
+        totals.percentageOkay += Number(item.Value.percentageOkay);
+        totals.percentageStressed += Number(item.Value.percentageStressed);
+    }
+
+    const feelingMap = {
+        percentageSuperExcited: {
+            label: "Super excited",
+            emoji: "😁"
+        },
+        percentageGood: {
+            label: "Good",
+            emoji: "😊"
+        },
+        percentageOkay: {
+            label: "Okay",
+            emoji: "😐"
+        },
+        percentageStressed: {
+            label: "Stressed",
+            emoji: "😞"
+        }
+    };
+
+    const [key] = Object.entries(totals).reduce((highest, current) =>
+        current[1] > highest[1] ? current : highest
+    );
+
+    return {
+        dominantFeeling: feelingMap[key as keyof typeof feelingMap].label,
+        emoji: feelingMap[key as keyof typeof feelingMap].emoji,
+    }
+}
+
+export {averageUserFeeling, feelingPercentage, overallFeeling, overallDominantFeeling};
 

@@ -10,14 +10,22 @@ const Downloads = () => {
 
     // Use state for displaying All Users Report download button
     const [showReport, setShowReport] = useState(true);
+    const [printDesktopLayout, setPrintDesktopLayout] = useState(false);
 
-    // Use state for displaying Individual Report download button
-    // const [showIndividualReport, setShowIndividualReport] = useState(false);
+    const handleDownload = async (targetRef: any, filename: string) => {
+        setPrintDesktopLayout(true);
 
+        await new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(resolve);
+            });
+        });
 
-
-    const handleDownload = (targetRef: any, filename: string) => {
-        generatePDF(targetRef, {filename: `${filename}.pdf`})
+        try {
+            await generatePDF(targetRef, {filename: `${filename}.pdf`});
+        } finally {
+            setPrintDesktopLayout(false);
+        }
     }
 
     return(
@@ -90,12 +98,12 @@ const Downloads = () => {
                 <div className="h-[100%]">
 
                     {showReport && (
-                        <AllUsersReport ref={targetForAllReportRef} />
+                        <AllUsersReport ref={targetForAllReportRef} forceDesktopLayout={printDesktopLayout} />
                     )}
 
                     {!showReport && (
                         <div ref={targetForIndividualReportRef} className="text-2xl">
-                            Hello world one user
+                            Not Implemented
                         </div>
                     )}
 
