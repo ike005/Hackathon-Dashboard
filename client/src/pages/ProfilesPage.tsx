@@ -22,12 +22,12 @@ const ProfilesPage = () => {
 
                     <div className="flex flex-col justify-between gap-3 min-w-0 text-center sm:text-left">
                         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:justify-between sm:items-center">
-                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-wide break-words">{usersData?.profileData?.name}</h1>
+                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-wide break-words">{usersData?.profile_info?.name}</h1>
                         </div>
 
                         <p className="flex flex-row items-center justify-center sm:justify-start min-w-0">
                             <SquareTerminal className="mr-1 size-5 sm:size-6 text-[#000000] font-semibold shrink-0" strokeWidth={2.5}/>
-                            <a href={usersData?.profileData?.github_link} target="_blank" rel="noopener noreferrer" className="text-sm sm:text-base truncate">{usersData?.profileData?.github_link}</a>
+                            <a href={usersData?.profile_info?.github_link} target="_blank" rel="noopener noreferrer" className="text-sm sm:text-base truncate">{usersData?.profile_info?.github_link}</a>
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center sm:items-center justify-center sm:justify-start">
@@ -40,10 +40,11 @@ const ProfilesPage = () => {
 
                 <div className="w-full xl:w-fit xl:max-w-md shrink-0">
                     <div className="flex flex-col gap-1 text-sm sm:text-base text-center lg:text-left">
-                        <p><span className="font-semibold">Discord ID:</span> {usersData?.profileData?.user_id}</p>
-                        <p><span className="font-semibold">Discord Username:</span> {usersData?.profileData?.username}</p>
-                        <p className="break-all"><span className="font-semibold">Email:</span> {usersData?.profileData?.email}</p>
-                        <p><span className="font-semibold">Gender:</span> {usersData?.profileData?.gender}</p>
+                        <p><span className="font-semibold">Discord ID:</span> {usersData?.profile_info?.user_id}</p>
+                        <p><span className="font-semibold">Discord Username:</span> {usersData?.profile_info?.username}</p>
+                        <p className="break-all"><span className="font-semibold">Email:</span> {usersData?.profile_info?.email}</p>
+                        <p><span className="font-semibold">Gender:</span> {usersData?.profile_info?.gender}</p>
+                        <p><span className="font-semibold">Age:</span> {usersData?.profile_info?.age}</p>
                     </div>
                 </div>
             </div>

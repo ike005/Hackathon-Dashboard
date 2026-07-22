@@ -56,27 +56,6 @@ function Container4 ({dailyLogData}: Container2Props) {
         hideLegend: true,
     } satisfies PieChartProps;
 
-    // Container4SideLabelInfo
-    const sideLabelInfo = [
-        {
-            label: 'Super excited 😁',
-            color: '#4F65FF',
-        },
-        {
-            label: 'Good 😊',
-            color: '#0DBEFF',
-        },
-        {
-            label: 'Okay 😐',
-            color: '#FFB422',
-        },
-        {
-            label: 'Stressed 😞',
-            color: '#FA4F58',
-        }
-    ]
-
-
     return (
         <>
             <div className="w-full bg-[#FFFFFF] border-2 border-[#C9C6D9] rounded-2xl md:rounded-3xl flex flex-col overflow-hidden">
@@ -88,16 +67,6 @@ function Container4 ({dailyLogData}: Container2Props) {
                         },
                     }}
                 />
-
-                <div className="flex flex-row flex-wrap justify-center items-center px-3 sm:px-4 py-3 sm:py-4 gap-3 sm:gap-4 md:gap-6">
-                    {sideLabelInfo.map((item, index) => (
-                        <div key={index} className="flex flex-col items-center gap-1 min-w-[4.5rem]">
-                            <div className="size-3 sm:size-4 rounded-full" style={{backgroundColor: item.color}}></div>
-                            <h3 className="text-xs sm:text-sm font-bold text-[#000000] text-center">{item.label}</h3>
-                        </div>
-                    ))}
-
-                </div>
             </div>
         </>
     );

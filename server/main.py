@@ -35,6 +35,30 @@ def to_json(doc):
     return json.loads(json_util.dumps(doc))
 
 
+def build_user_report_data(user_profile_info):
+    user_id = user_profile_info["user_id"]
+
+    try:
+        query_user_id = int(user_id)
+    except (TypeError, ValueError):
+        query_user_id = user_id
+
+    user_daily_log = list(db.daily_log.find({"user_id": query_user_id}))
+    user_brainstorming_ideas = list(db.brainstorming.find({"user_id": query_user_id}))
+
+    for log in user_daily_log:
+        serialize(log)
+
+    for idea in user_brainstorming_ideas:
+        serialize(idea)
+
+    return {
+        "profile_info": serialize(user_profile_info),
+        "daily_log": user_daily_log,
+        "brainstorming_ideas": user_brainstorming_ideas
+    }
+
+
 # ── Change Stream Watchers ───────────────────────────────────────────────────
 
 def watch_collection(collection_name, event_name):
@@ -104,32 +128,26 @@ def get_daily_log():
     data = [serialize(d) for d in db.daily_log.find()]
     emit("daily_log", data)
 
-@socketio.on("get_all_users_brainstorming_ideas")
-def get_brainstorming_ideas():
+@socketio.on("get_all_users_info_with_brainstorming_ideas")
+def get_users_info_and_brainstorming_ideas():
     data = [serialize(b) for b in db.brainstorming.find()]
     emit("brainstorming_ideas", data)
 
 @socketio.on("get_a_unique_user_data")
 def get_user_by_id(user_id):
     user_profile_info = db.users_new.find_one({"user_id": user_id})
-    user_daily_log = list(db.daily_log.find({"user_id": int(user_id)}))
-    user_brainstorming_ideas = list(db.brainstorming.find({"user_id": int(user_id)}))
 
     if not user_profile_info:
         emit({"error": "User not found"})
         return
 
-    for log in user_daily_log:
-        log["_id"] = str(log["_id"])
+    emit("user_info", build_user_report_data(user_profile_info))
 
-    for idea in user_brainstorming_ideas:
-        idea["_id"] = str(idea["_id"])
-
-    emit("user_info", {
-        "profile_info": serialize(user_profile_info),
-        "daily_log": user_daily_log,
-        "brainstorming_ideas": user_brainstorming_ideas
-    })
+@socketio.on("get_all_users_report_data")
+def get_all_users_report_data():
+    report_data = [build_user_report_data(user) for user in db.users_new.find()]
+    print(f"Sending report data for {len(report_data)} users")
+    emit("all_users_report_data", report_data)
 
 if __name__ == "__main__":
     start_change_streams()  # ← start watchers before serving

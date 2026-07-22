@@ -16,7 +16,7 @@ const NavLinks = ({onNavigate}: NavLinksProps) => {
         <div className="flex flex-col gap-1 lg:gap-4 px-2 lg:px-4 py-2 lg:py-0">
             <NavLink to="/" className={linkClass} onClick={onNavigate}>Dashboard</NavLink>
             <NavLink to="/participant" className={linkClass} onClick={onNavigate}>Participants</NavLink>
-            <NavLink to="/part" className={linkClass} onClick={onNavigate}>Downloads</NavLink>
+            <NavLink to="/download" className={linkClass} onClick={onNavigate}>Downloads</NavLink>
 
             {isLoggedIn ?
                 <NavLink to="#" className="block px-4 lg:px-6 py-2 text-[#000000] cursor-pointer rounded-lg hover:bg-[#F0F3FF]/60" onClick={onNavigate}>Logout</NavLink>
