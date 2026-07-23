@@ -31,10 +31,6 @@ socketio = SocketIO(
     ping_interval=25,
 )
 
-change_streams_started = False
-change_streams_lock = threading.Lock()
-
-
 # ── Helper ───────────────────────────────────────────────────────────────────
 
 def serialize(doc):
@@ -100,14 +96,7 @@ def watch_collection(collection_name, event_name):
 
 
 def start_change_streams():
-    """Spin up one background thread per collection exactly once."""
-    global change_streams_started
-
-    with change_streams_lock:
-        if change_streams_started:
-            return
-        change_streams_started = True
-
+    """Spin up one background thread per collection you want to watch."""
     collections = [
         ('users_new',     'user_updated'),
         ('daily_log',     'daily_log_updated'),
@@ -126,9 +115,6 @@ def start_change_streams():
 
 @socketio.on('connect')
 def handle_connect():
-    # Render starts this app through Gunicorn, so the __main__ block is never
-    # run there. Start the watchers on the first real client connection.
-    start_change_streams()
     print(f'Client connected: {request.sid}')
 
 @socketio.on('disconnect')
