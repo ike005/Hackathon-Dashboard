@@ -1,17 +1,30 @@
 import os
 import threading
 import json
+from functools import wraps
 from flask import Flask, request
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 from dotenv import load_dotenv
 from bson import json_util
+from pymongo.errors import PyMongoError
 
 load_dotenv()
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = os.getenv('MONGO_DB_LINK')
+mongo_uri = os.getenv('MONGO_DB_LINK')
+
+if not mongo_uri:
+    raise RuntimeError("MONGO_DB_LINK is not configured.")
+
+# Do not leave Socket.IO requests waiting for PyMongo's default 30-second
+# server-selection timeout when Atlas cannot be reached from Render.
+timeout_separator = '&' if '?' in mongo_uri else '?'
+app.config["MONGO_URI"] = (
+    f"{mongo_uri}{timeout_separator}serverSelectionTimeoutMS=10000"
+    "&connectTimeoutMS=10000"
+)
 app.config["SECRET_KEY"] = os.getenv('SECRET_KEY', 'your-secret-key')
 
 mongo = PyMongo(app)
@@ -42,6 +55,20 @@ def serialize(doc):
 def to_json(doc):
     """Converts BSON (MongoDB types) to a JSON-safe dict."""
     return json.loads(json_util.dumps(doc))
+
+
+def handle_database_error(handler):
+    """Return a clear Socket.IO error when MongoDB cannot be reached."""
+    @wraps(handler)
+    def wrapped(*args, **kwargs):
+        try:
+            return handler(*args, **kwargs)
+        except PyMongoError as error:
+            print(f"[MongoDB] {handler.__name__} failed: {error}", flush=True)
+            emit("server_error", {
+                "message": "The server cannot reach MongoDB. Check the Render logs and Atlas Network Access settings."
+            })
+    return wrapped
 
 
 def build_user_report_data(user_profile_info):
@@ -127,22 +154,26 @@ def handle_disconnect():
 # ── REST endpoints (unchanged, still useful for initial page load) ────────────
 
 @socketio.on("get_all_users")
+@handle_database_error
 def get_users():
     data = [serialize(u) for u in db.users_new.find()]
     print(f"Sending {len(data)} users")
     emit("users", data)
 
 @socketio.on("get_all_users_daily_log")
+@handle_database_error
 def get_daily_log():
     data = [serialize(d) for d in db.daily_log.find()]
     emit("daily_log", data)
 
 @socketio.on("get_all_users_info_with_brainstorming_ideas")
+@handle_database_error
 def get_users_info_and_brainstorming_ideas():
     data = [serialize(b) for b in db.brainstorming.find()]
     emit("brainstorming_ideas", data)
 
 @socketio.on("get_a_unique_user_data")
+@handle_database_error
 def get_user_by_id(user_id):
     try:
         query_user_id = int(user_id)
@@ -158,6 +189,7 @@ def get_user_by_id(user_id):
     emit("user_info", build_user_report_data(user_profile_info))
 
 @socketio.on("get_all_users_report_data")
+@handle_database_error
 def get_all_users_report_data():
     report_data = [build_user_report_data(user) for user in db.users_new.find()]
     print(f"Sending report data for {len(report_data)} users")
