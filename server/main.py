@@ -157,6 +157,10 @@ def get_all_users_report_data():
     print(f"Sending report data for {len(report_data)} users")
     emit("all_users_report_data", report_data)
 
+@socketio.on("connect")
+def handle_connect():
+    print(f"Client connected: {request.sid}")
+
 if __name__ == "__main__":
     start_change_streams()  # ← start watchers before serving
     socketio.run(app, debug=True, port=8080)
