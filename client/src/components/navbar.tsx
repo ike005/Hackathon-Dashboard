@@ -7,7 +7,7 @@ type NavLinksProps = {
 };
 
 const NavLinks = ({onNavigate}: NavLinksProps) => {
-    const isLoggedIn = true;
+    // const isLoggedIn = true;
     const linkClass = ({isActive}: { isActive: boolean }) =>
         `block px-4 lg:px-6 py-2 cursor-pointer text-sm font-semibold text-[#000000] rounded-lg transition-colors
         ${isActive ? 'bg-[#F0F3FF] text-[#135BEC]' : 'hover:bg-[#F0F3FF]/60'}`;
@@ -18,11 +18,11 @@ const NavLinks = ({onNavigate}: NavLinksProps) => {
             <NavLink to="/participant" className={linkClass} onClick={onNavigate}>Participants</NavLink>
             <NavLink to="/download" className={linkClass} onClick={onNavigate}>Downloads</NavLink>
 
-            {isLoggedIn ?
-                <NavLink to="#" className="block px-4 lg:px-6 py-2 text-[#000000] cursor-pointer rounded-lg hover:bg-[#F0F3FF]/60" onClick={onNavigate}>Logout</NavLink>
-                :
-                <NavLink to="#" className="block px-4 lg:px-6 py-2 text-[#000000] cursor-pointer rounded-lg hover:bg-[#F0F3FF]/60" onClick={onNavigate}>Login</NavLink>
-            }
+            {/*{isLoggedIn ?*/}
+            {/*    <NavLink to="#" className="block px-4 lg:px-6 py-2 text-[#000000] cursor-pointer rounded-lg hover:bg-[#F0F3FF]/60" onClick={onNavigate}>Logout</NavLink>*/}
+            {/*    :*/}
+            {/*    <NavLink to="#" className="block px-4 lg:px-6 py-2 text-[#000000] cursor-pointer rounded-lg hover:bg-[#F0F3FF]/60" onClick={onNavigate}>Login</NavLink>*/}
+            {/*}*/}
         </div>
     );
 };
