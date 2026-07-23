@@ -31,6 +31,9 @@ socketio = SocketIO(
     ping_interval=25,
 )
 
+change_streams_started = False
+change_streams_lock = threading.Lock()
+
 
 # ── Helper ───────────────────────────────────────────────────────────────────
 
@@ -97,7 +100,14 @@ def watch_collection(collection_name, event_name):
 
 
 def start_change_streams():
-    """Spin up one background thread per collection you want to watch."""
+    """Spin up one background thread per collection exactly once."""
+    global change_streams_started
+
+    with change_streams_lock:
+        if change_streams_started:
+            return
+        change_streams_started = True
+
     collections = [
         ('users_new',     'user_updated'),
         ('daily_log',     'daily_log_updated'),
@@ -116,6 +126,9 @@ def start_change_streams():
 
 @socketio.on('connect')
 def handle_connect():
+    # Render starts this app through Gunicorn, so the __main__ block is never
+    # run there. Start the watchers on the first real client connection.
+    start_change_streams()
     print(f'Client connected: {request.sid}')
 
 @socketio.on('disconnect')
@@ -143,10 +156,15 @@ def get_users_info_and_brainstorming_ideas():
 
 @socketio.on("get_a_unique_user_data")
 def get_user_by_id(user_id):
-    user_profile_info = db.users_new.find_one({"user_id": user_id})
+    try:
+        query_user_id = int(user_id)
+    except (TypeError, ValueError):
+        query_user_id = user_id
+
+    user_profile_info = db.users_new.find_one({"user_id": query_user_id})
 
     if not user_profile_info:
-        emit({"error": "User not found"})
+        emit("error", {"message": "User not found"})
         return
 
     emit("user_info", build_user_report_data(user_profile_info))
@@ -157,10 +175,5 @@ def get_all_users_report_data():
     print(f"Sending report data for {len(report_data)} users")
     emit("all_users_report_data", report_data)
 
-@socketio.on("connect")
-def handle_connect():
-    print(f"Client connected: {request.sid}")
-
 if __name__ == "__main__":
-    start_change_streams()  # ← start watchers before serving
     socketio.run(app, debug=True, port=8080)
