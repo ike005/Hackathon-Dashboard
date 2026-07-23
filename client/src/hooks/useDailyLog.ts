@@ -7,7 +7,6 @@ export function useDailyLog() {
 
     useEffect(() => {
         const handleUsers = (users: any[]) => {
-            console.log("Initial users:", users);
             setUsersDailyLogData(users);
             setLoading(false);
         };

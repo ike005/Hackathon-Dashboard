@@ -16,8 +16,6 @@ function trackActiveUsers(data: any) {
     for (let i = 0; i < data.dailyLogData.length; i++) {
         if (data.dailyLogData[i]["log_date"] == (currentDate)) {
             currentlyActiveUsers++;
-            console.log("beans");
-            console.log(currentlyActiveUsers);
         }
     }
     const dictArray = [];

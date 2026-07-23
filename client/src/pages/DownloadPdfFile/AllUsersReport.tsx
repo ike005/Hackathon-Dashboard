@@ -272,8 +272,6 @@ const AllUsersReport = forwardRef<HTMLDivElement, AllUsersReportProps>(function 
 
     const {usersDailyLogData} = useDailyLog();
     const mostUserFeelings = overallDominantFeeling(usersDailyLogData);
-    console.log("moste user feelijng")
-    console.log(mostUserFeelings)
 
     return (
         <div ref={ref} style={styles.root}>

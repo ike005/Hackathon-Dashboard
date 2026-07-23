@@ -7,7 +7,6 @@ export function useBrainstormingIdeas() {
 
     useEffect(() => {
         const handleUsers = (users: any[]) => {
-            console.log("Brainstorming ideas:", users);
             setUsersBrainstormingIdeas(users);
             setLoading(false);
         };

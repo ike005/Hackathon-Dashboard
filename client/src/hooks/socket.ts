@@ -15,23 +15,23 @@ export const socket: Socket = io(baseUrl, {
     reconnectionDelayMax: 5_000,
 });
 
-socket.on("connect", () => {
-    console.log("✅ Connected");
-    console.log(socket.id);
-});
-
-socket.on("disconnect", (reason) => {
-    console.log("❌ Disconnected:", reason);
-});
-
-socket.on("connect_error", (err) => {
-    console.log("❌ Connect error:", err);
-});
-
-socket.on("error", (err) => {
-    console.log("Socket error:", err);
-});
-
-socket.on("server_error", (error) => {
-    console.error("Server data error:", error.message);
-});
+// socket.on("connect", () => {
+//     console.log("✅ Connected");
+//     console.log(socket.id);
+// });
+//
+// socket.on("disconnect", (reason) => {
+//     console.log("❌ Disconnected:", reason);
+// });
+//
+// socket.on("connect_error", (err) => {
+//     console.log("❌ Connect error:", err);
+// });
+//
+// socket.on("error", (err) => {
+//     console.log("Socket error:", err);
+// });
+//
+// socket.on("server_error", (error) => {
+//     console.error("Server data error:", error.message);
+// });
