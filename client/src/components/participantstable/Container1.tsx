@@ -51,7 +51,6 @@ const Container1 = ({usersData}: Container1Props) => {
                                             <StyledTableCell align="left" style={{color: '#000000', textAlign: 'center'}}>{row.gender}</StyledTableCell>
                                             <StyledTableCell align="left" style={{ textAlign: 'center'}}>
                                                 <button
-                                                    // onClick={() => onViewDetails?.(row.fullData)}
                                                     onClick={() => navigate(`/participant/${row.id}`)}
                                                     className="rounded-md text-[#135BEC] hover:text-[#3726CD] font-semibold text-md cursor-pointer transition-colors">View Profile
                                                 </button>
