@@ -25,8 +25,10 @@ CORS(app, origins='*')
 socketio = SocketIO(
     app,
     cors_allowed_origins="*",
-    cors_allowed_credentials=True,  # ← ADD THIS LINE
-    async_mode='eventlet',
+    cors_allowed_credentials=True,
+    # Gunicorn 26 no longer ships its eventlet worker. Threading plus
+    # simple-websocket supports both Socket.IO polling and WebSocket transport.
+    async_mode='threading',
     ping_timeout=60,
     ping_interval=25,
 )
