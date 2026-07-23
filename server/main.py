@@ -21,7 +21,15 @@ if db is None:
     raise Exception("MongoDB connection failed. Check your .env file.")
 
 CORS(app, origins='*')
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+# socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+socketio = SocketIO(
+    app,
+    cors_allowed_origins="*",
+    cors_allowed_credentials=True,  # ← ADD THIS LINE
+    async_mode='eventlet',
+    ping_timeout=60,
+    ping_interval=25,
+)
 
 
 # ── Helper ───────────────────────────────────────────────────────────────────
@@ -148,6 +156,10 @@ def get_all_users_report_data():
     report_data = [build_user_report_data(user) for user in db.users_new.find()]
     print(f"Sending report data for {len(report_data)} users")
     emit("all_users_report_data", report_data)
+
+@socketio.on("connect")
+def handle_connect():
+    print(f"Client connected: {request.sid}")
 
 if __name__ == "__main__":
     start_change_streams()  # ← start watchers before serving
