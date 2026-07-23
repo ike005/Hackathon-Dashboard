@@ -7,7 +7,6 @@ export function useAllUsersReport() {
 
     useEffect(() => {
         const handleReportData = (data: any[]) => {
-            console.log("All users report data:", data);
             setReportData(data);
             setLoading(false);
         };

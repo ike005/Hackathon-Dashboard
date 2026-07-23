@@ -1,11 +1,7 @@
 import Container1 from "../components/participantstable/Container1.tsx";
 import {useUsers} from "../hooks/useUsers.ts";
 import {useState} from "react";
-// import {ComponentToPrint} from "./ComponentToPrint.tsx";
-
-
 import SearchIcon from '@mui/icons-material/Search';
-// import {useReactToPrint} from "react-to-print";
 
 const Participants = () => {
     const {usersData} = useUsers();

@@ -11,7 +11,6 @@ export function useAllDataPoints() {
         if (!user_id) return;
 
         const handleUserInfo = (data: any) => {
-            console.log("Received user data:", data);
             setUsersData(data);
             setLoading(false);
         };
@@ -40,7 +39,6 @@ export function useAllDataPoints() {
         };
     }, [user_id]);
 
-    console.log("usersData:", usersData);
 
     return {
         usersData,

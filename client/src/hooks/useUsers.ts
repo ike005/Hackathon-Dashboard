@@ -7,7 +7,6 @@ export function useUsers() {
 
     useEffect(() => {
         const handleUsers = (users: any[]) => {
-            console.log("Initial users:", users);
             setUsersData(users);
             setLoading(false);
         };
