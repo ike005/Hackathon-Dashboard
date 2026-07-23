@@ -57,6 +57,19 @@ def to_json(doc):
     return json.loads(json_util.dumps(doc))
 
 
+def user_id_filter(user_id):
+    """Match user IDs stored as either strings or MongoDB numbers."""
+    values = [user_id]
+    try:
+        numeric_user_id = int(user_id)
+        if numeric_user_id not in values:
+            values.append(numeric_user_id)
+    except (TypeError, ValueError):
+        pass
+
+    return {"$in": values}
+
+
 def handle_database_error(handler):
     """Return a clear Socket.IO error when MongoDB cannot be reached."""
     @wraps(handler)
@@ -73,14 +86,10 @@ def handle_database_error(handler):
 
 def build_user_report_data(user_profile_info):
     user_id = user_profile_info["user_id"]
+    query = {"user_id": user_id_filter(user_id)}
 
-    try:
-        query_user_id = int(user_id)
-    except (TypeError, ValueError):
-        query_user_id = user_id
-
-    user_daily_log = list(db.daily_log.find({"user_id": query_user_id}))
-    user_brainstorming_ideas = list(db.brainstorming.find({"user_id": query_user_id}))
+    user_daily_log = list(db.daily_log.find(query))
+    user_brainstorming_ideas = list(db.brainstorming.find(query))
 
     for log in user_daily_log:
         serialize(log)
@@ -175,12 +184,7 @@ def get_users_info_and_brainstorming_ideas():
 @socketio.on("get_a_unique_user_data")
 @handle_database_error
 def get_user_by_id(user_id):
-    try:
-        query_user_id = int(user_id)
-    except (TypeError, ValueError):
-        query_user_id = user_id
-
-    user_profile_info = db.users_new.find_one({"user_id": query_user_id})
+    user_profile_info = db.users_new.find_one({"user_id": user_id_filter(user_id)})
 
     if not user_profile_info:
         emit("error", {"message": "User not found"})
