@@ -5,11 +5,9 @@ const baseUrl = import.meta.env.VITE_API_URL;
 
 export const socket: Socket = io(baseUrl, {
     autoConnect: true,
-    // The deployed Render service responds to Socket.IO polling but does not
-    // complete its WebSocket upgrade. Keeping this polling-only avoids a
-    // failed upgrade disconnecting the dashboard while retaining real-time
-    // Socket.IO events.
-    transports: ["polling"],
+    // Start with polling so the client can connect while the server is waking
+    // up, then Socket.IO can upgrade to WebSocket when the server supports it.
+    transports: ["polling", "websocket"],
     path: "/socket.io",
     reconnection: true,
     reconnectionAttempts: Infinity,
