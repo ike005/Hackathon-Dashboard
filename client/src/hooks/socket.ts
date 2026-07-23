@@ -31,3 +31,7 @@ socket.on("connect_error", (err) => {
 socket.on("error", (err) => {
     console.log("Socket error:", err);
 });
+
+socket.on("server_error", (error) => {
+    console.error("Server data error:", error.message);
+});
